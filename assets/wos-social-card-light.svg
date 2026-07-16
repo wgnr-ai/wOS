@@ -1,0 +1,9 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="wOS v0.1 — Agent behavior, designed.">
+  <rect width="1200" height="630" fill="#FAFAF7"/>
+  <text x="600" y="290" font-family="'IBM Plex Serif', Georgia, serif" font-weight="600" font-size="120" fill="#14171C" text-anchor="middle">wOS</text>
+  <text x="600" y="290" font-family="'IBM Plex Mono', monospace" font-weight="400" font-size="72" fill="#8E5A18" text-anchor="middle" dx="200" dy="0">v0.1</text>
+  <text x="600" y="360" font-family="'IBM Plex Sans', Inter, system-ui, sans-serif" font-style="italic" font-weight="400" font-size="36" fill="#14171C" text-anchor="middle">Agent behavior, designed.</text>
+  <line x1="460" y1="400" x2="740" y2="400" stroke="#8E5A18" stroke-width="1"/>
+  <text x="600" y="445" font-family="'IBM Plex Sans', Inter, system-ui, sans-serif" font-weight="400" font-size="22" fill="#5C6068" text-anchor="middle">A behavioral design standard for agent systems.</text>
+  <text x="1170" y="600" font-family="'IBM Plex Mono', monospace" font-weight="400" font-size="18" fill="#5C6068" text-anchor="end">wos.wgnr.ai</text>
+</svg>
