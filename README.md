@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="assets/wos-lockup-readme-dark.svg" alt="wOS v0.1 — Agent behavior, designed." width="600">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/wos-lockup-readme-light.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/wos-lockup-readme-dark.svg">
+    <img alt="wOS v0.1 — Agent behavior, designed." width="600">
+  </picture>
 </p>
 
 <h3 align="center">The open behavioral design standard for AI agents.</h3>
