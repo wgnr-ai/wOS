@@ -50,6 +50,34 @@ Be direct. Be evidence-based. Be respectful. wOS is about making agents behave w
 
 All contributions are accepted under the [Apache-2.0 License](LICENSE).
 
+## Documentation standards
+
+### CHANGELOG entries
+
+Every meaningful change gets a CHANGELOG entry. Each entry should include:
+
+- **Added** — new files, features, or capabilities
+- **Changed** — modifications to existing behavior or content
+- **Supersedes** — what the new version replaces (retain old files for audit trail)
+
+### Out of Scope (per revision)
+
+Every CHANGELOG entry should include an `### Out of Scope` section documenting what was considered but excluded. Format:
+
+```
+### Out of Scope (this revision)
+- [topic] — [reason excluded] — [what evidence would re-open it]
+```
+
+Example:
+```
+### Out of Scope (this revision)
+- Tier-based fallback framework for transient upstream errors — belongs in routing skill, not behavioral doctrine — re-opens if routing skill is deprecated and fallback moves into spec scope
+- Print-style voice guide — companion product, not part of behavioral standard — re-opens if voice doctrine is formalized as wOS-adjacent spec
+```
+
+This discipline prevents scope creep, documents decision rationale for future contributors, and creates a re-evaluation trigger (when the "evidence" condition is met, revisit the topic).
+
 ## Questions
 
 Open an issue with the `question` label, or reach out at [wos@wgnr.ai](mailto:wos@wgnr.ai).
