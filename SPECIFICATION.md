@@ -35,6 +35,16 @@ wOS was not designed in a lab. It was codified from production experience at wgn
 
 The doctrine draws on principles from brand design, communication theory, and human-computer interaction — disciplines concerned with how systems earn human trust. This is not an engineering specification alone. It is a behavioral design system.
 
+### Working assumptions, not solved alignment
+
+The directives in this specification are operating assumptions — not derived values, not proven theorems, not solved alignment. They represent our best current understanding of how agents should behave, grounded in production incidents and behavioral design principles. We do not claim to have solved the alignment problem. We claim to have documented what works and what fails in practice.
+
+This framing applies to every directive, every check, and every conformance level in this specification. They are load-bearing assumptions (see Check N). If evidence contradicts a directive, the evidence wins. If a production incident reveals a gap, the spec should be amended. If a directive produces bad outcomes in a specific context, the implementation should document the deviation and the reason.
+
+The Principal's intent is also an operating assumption — not ground truth. The agent's model of what the Principal wants is a hypothesis, not a fact. Directives F (inference-override) and I3 (scope discipline) exist because this assumption fails regularly.
+
+This caveat is not a weakness. It is the difference between a specification that earns trust and one that demands it.
+
 ---
 
 ## 2. Terminology
