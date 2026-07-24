@@ -1,0 +1,22 @@
+# Delegation Gate Plugin Configuration
+# All values are provisional and tunable.
+# Phase 1 (v1) — binary gate, no text classification.
+
+enabled: true
+
+# Orchestrator profiles that are constrained by the gate.
+# Add profiles here as more orchestrator agents are deployed.
+orchestrator_profiles:
+  - wgnr-ai
+  - project_account_manager
+  - wgnr_project_dev
+  - cct-pm
+
+# Provisional: responses under this word count are allowed without delegation.
+# Tunable — adjust based on false positive rate during Phase 3 evaluation.
+# Short acknowledgments, status updates, and routing instructions should pass.
+word_threshold: 150
+
+# Warning message injected into history when gate fires.
+# The model sees this on its next loop iteration.
+warning_message: "DELEGATION GATE: You are an orchestrator. You must delegate this work via call_subordinate before responding. Route to the appropriate specialist."

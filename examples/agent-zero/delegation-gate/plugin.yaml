@@ -1,0 +1,4 @@
+name: _delegation_gate
+title: Delegation Enforcement Gate
+description: Prevents orchestrator-class agents from terminating the response loop without proof of delegation via call_subordinate.
+version: 1.0.0

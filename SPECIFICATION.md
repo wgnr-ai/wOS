@@ -2,12 +2,12 @@
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.1 (Draft)
+**Version:** 0.2 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
 **Domain:** wos.wgnr.ai
-**Date:** 2026-07-16
+**Date:** 2026-07-24
 
 ---
 
@@ -485,9 +485,41 @@ Agents SHOULD declare their conformance level in their manifest, configuration, 
 
 ```
 wOS conformance: Level 2 (Extended)
-Version: 0.1
+Version: 0.2
 Domains: Communication, Verification, Lifecycle, Escalation, Delegation
 ```
+
+Agents that implement code-level enforcement for specific directives SHOULD also declare which directives are enforced and the mechanism used:
+
+```
+wOS conformance: Level 2 (Extended) + Directive D1 enforcement
+Enforcement: Delegation gate (tool_execute_after hook)
+Platform: Agent Zero v2.6
+```
+
+### Code-level enforcement implementations
+
+The implementation mechanisms above (prompt injection, skills/plugins, configuration) are advisory — the agent's model chooses to comply. For directives where advisory compliance is insufficient, implementations MAY add code-level enforcement: a mechanism that prevents violation of a directive regardless of model behavior.
+
+**When to use enforcement:** When production evidence shows that prompt-only delivery of a directive is being bypassed consistently. The escalation path is: declare the directive (prompt) → add pre-delivery checks (structural) → add code enforcement (gate). Do not jump to enforcement for directives that hold under prompt-only delivery — enforcement adds coupling and maintenance cost.
+
+**Requirements for an enforcement implementation:**
+
+1. **Prevent violation, not just detect it.** The mechanism must make the violation impossible or immediately reversible, not merely log it after the fact.
+2. **Be code-level, not prompt-level.** The mechanism runs in the framework's execution layer (tool hooks, response interceptors, middleware), not in the agent's system prompt.
+3. **Preserve agent autonomy within bounds.** The mechanism blocks the specific violation, not all agent action. After enforcement fires, the agent gets another opportunity to comply correctly.
+4. **Be auditable.** Every enforcement trigger is logged with: agent profile, directive enforced, violation detected, enforcement action taken.
+5. **Be configurable.** Enforcement can be enabled/disabled per project or per agent profile without modifying the directive.
+
+**Principle/enforcement split.** The directive (principle) remains portable and framework-agnostic — any platform can implement it. The enforcement implementation is platform-specific — it uses the platform's native extension mechanism. A platform declares: "We enforce Directive D1 using [our mechanism]." The spec validates that the mechanism meets the requirements above; the implementation details are platform-owned.
+
+**Reference implementations:**
+
+| Directive | Enforcement | Platform | Location |
+|---|---|---|---|
+| D1 (Delegation is the default) | Delegation gate — blocks orchestrator response loop termination without proof of `call_subordinate` in conversation history | Agent Zero v2.5+ | [examples/agent-zero/delegation-gate/](examples/agent-zero/delegation-gate/) |
+
+Platforms implementing enforcement SHOULD publish their reference implementations under the same license so other platforms can adopt or adapt them.
 
 ### Recommended pre-delivery checks
 
@@ -509,8 +541,11 @@ Implementations SHOULD run the following checks before delivering any response. 
 | L | Open-before-claim | Every claim about file/directory state | Verify via tool call in the same turn. Prior turns don't count. |
 | M | Infra-change 3-question test | Every infrastructure change recommendation | Apply WHY/HOW/WHAT to the recommendation itself. If vague, sharpen or remove. |
 | N | Load-bearing sensitivity | Every claim that, if false, would invalidate a recommendation, option, or scheduled action | State the sensitivity range and the action that would change if the claim moved. |
+| O | Enforcement-verified delegation | Every orchestrator response on an enforcement-enabled platform | Verify the enforcement gate did not need to fire; if it did, verify subsequent delegation succeeded; if it did not fire, audit for gate bypass (e.g., compact deliverables under threshold). |
 
 Check N catches fragile recommendations — cases where the agent's advice is correct *today* but depends on an assumption that could shift. Example: "wos.io is available, register it" — the recommendation is valid, but the underlying claim (domain availability) is load-bearing. If it's false, the entire next step changes. Stating the sensitivity prevents silent failure when assumptions shift.
+
+Check O applies only on platforms with code-level delegation enforcement (see [Code-level enforcement implementations](#code-level-enforcement-implementations)). On such platforms, the enforcement gate performs this check automatically at the code level; Check O exists for post-hoc auditing and for agents verifying their own compliance before the gate needs to fire.
 
 ---
 
@@ -545,11 +580,16 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.1** (Draft). The spec will move to v1.0 when:
+The current version is **v0.2** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
+### Changelog
+
+- **v0.2 (2026-07-24):** Added code-level enforcement implementations section to Implementation Guidance (principle/enforcement split, enforcement requirements, escalation path from prompt → checks → enforcement). Added Check O (enforcement-verified delegation). Added first reference enforcement implementation: delegation gate for Agent Zero (Directive D1). Additive — no directives, checks, or conformance level definitions changed.
+- **v0.1 (2026-07-16):** Initial public draft.
+
 ---
 
-*Built by wgnr.ai — wOS v0.1. Human + AI, by design_*
+*Built by wgnr.ai — wOS v0.2. Human + AI, by design.*
