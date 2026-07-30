@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wOS — Open behavioral design standard for AI agents</title>
+  <meta name="description" content="wOS v0.2 — Open behavioral design standard for AI agents. How they communicate, verify, escalate, delegate, and remember.">
+  <meta property="og:title" content="wOS — Agent behavior, designed.">
+  <meta property="og:description" content="The open behavioral design standard for AI agents.">
+  <meta property="og:image" content="assets/wos-social-card-light.svg">
+  <meta property="og:url" content="https://wos.wgnr.ai">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="wOS — Agent behavior, designed.">
+  <meta name="twitter:description" content="The open behavioral design standard for AI agents.">
+  <meta name="twitter:image" content="assets/wos-social-card-light.svg">
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #1f2328;
+      --code-bg: #f6f8fa;
+      --border-color: #d0d7de;
+      --link-color: #0969da;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #0d1117;
+        --text-color: #e6edf3;
+        --code-bg: #161b22;
+        --border-color: #30363d;
+        --link-color: #58a6ff;
+      }
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h3 {
+      margin-top: 1rem;
+      font-weight: 400;
+    }
+
+    header p {
+      margin: 0.5rem 0;
+    }
+
+    main {
+      margin-top: 2rem;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      line-height: 1.25;
+    }
+
+    h2 {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.3em;
+    }
+
+    a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    code {
+      background-color: var(--code-bg);
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: var(--code-bg);
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+
+    pre code {
+      display: block;
+      padding: 1rem;
+      overflow-x: auto;
+      background: none;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+      display: block;
+      overflow-x: auto;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+
+    th {
+      font-weight: 600;
+      background-color: var(--code-bg);
+    }
+
+    blockquote {
+      border-left: 3px solid var(--border-color);
+      margin: 0;
+      padding: 0 1rem;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 2rem 0;
+    }
+
+    ol, ul {
+      padding-left: 1.5em;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.9em;
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="assets/wos-lockup-readme-light.png">
+        <source media="(prefers-color-scheme: light)" srcset="assets/wos-lockup-readme-dark.png">
+        <img alt="wOS v0.2 — Agent behavior, designed." width="600">
+      </picture>
+    </p>
+
+    <h3 align="center">The open behavioral design standard for AI agents.</h3>
+
+    <p align="center">
+      <a href="SPECIFICATION.md">Read the Spec</a> · <a href="CONTRIBUTING.md">Contribute</a> · <a href="https://wos.wgnr.ai">Website</a>
+    </p>
+
+    <p align="center">
+      <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License">
+      <img src="https://img.shields.io/badge/spec-v0.2-orange" alt="Spec Version">
+      <img src="https://img.shields.io/badge/status-Draft-yellow" alt="Status">
+    </p>
+  </header>
+
+  <hr>
+
+  <main>
+    <h2>What it is</h2>
+    <p>wOS governs five behavior domains an agent must master to be trustworthy: <strong>communication</strong>, <strong>verification</strong>, <strong>escalation</strong>, <strong>delegation</strong>, and <strong>memory</strong>. The standard is a specification, not a framework. wOS does not replace your agent runtime, your model, or your orchestration layer. It sits on top of them, defining the behavioral contract an agent must satisfy to interoperate safely with humans, peers, and downstream systems. Read the spec, adopt the directives, ship an agent that behaves.</p>
+
+    <h2>Why it exists</h2>
+    <p>AI agents are technically capable and behaviorally incoherent. They hedge when they should escalate, ghost-complete tasks they have not started, and invent citations because they cannot tell you what they do not know. These are not edge cases — they are the default state of the field.</p>
+    <p>Other standards cover adjacent layers: <strong>ACS</strong> specifies what an agent is not allowed to do. <strong>AGENTS.md</strong> specifies what an agent should know. <strong>Agent OS</strong> specifies how an agent should write code. None specify how an agent should behave. wOS fills the gap.</p>
+    <p>The doctrine is production-tested — it was authored inside <a href="https://wgnr.ai">wgnr.ai</a>, a brand agency that has run these agents in client work since GPT-3.5.</p>
+
+    <h2>How to adopt it</h2>
+    <ol>
+      <li><strong>Read</strong> the <a href="SPECIFICATION.md">SPECIFICATION.md</a></li>
+      <li><strong>Add</strong> the wOS directives to your agent's system prompt or runtime configuration</li>
+      <li><strong>Validate</strong> against the published compliance checks</li>
+      <li><strong>Declare</strong> your conformance level — Core, Extended, or Strict — in your agent's manifest</li>
+    </ol>
+    <p>The lowest-friction entry point is the <strong>verification domain</strong>: a single directive that forces the agent to surface what it does not know before it claims completion.</p>
+
+    <h2>Conformance levels</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Domains</th>
+          <th>Who should adopt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Core</strong></td>
+          <td>Communication + Verification</td>
+          <td>Any agent that interacts with humans</td>
+        </tr>
+        <tr>
+          <td><strong>Extended</strong></td>
+          <td>Core + Escalation + Delegation</td>
+          <td>Multi-agent systems, production orchestrators</td>
+        </tr>
+        <tr>
+          <td><strong>Strict</strong></td>
+          <td>Extended + Identity + Memory</td>
+          <td>Long-running agents with persistent state</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Competitive landscape</h2>
+    <p>wOS does not compete with adjacent standards. It occupies the quadrant they leave open.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Standard</th>
+          <th>What it governs</th>
+          <th>Relationship</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="https://github.com/microsoft/agent-governance-toolkit">ACS</a> (Microsoft)</td>
+          <td>Security policy</td>
+          <td>Complementary — security vs. behavior</td>
+        </tr>
+        <tr>
+          <td><a href="https://agents.md/">AGENTS.md</a> (AAIF)</td>
+          <td>Context and instructions</td>
+          <td>Complementary — knowledge vs. behavior</td>
+        </tr>
+        <tr>
+          <td><a href="https://buildermethods.com/agent-os">Agent OS</a> (Builder Methods)</td>
+          <td>Coding standards</td>
+          <td>Complementary — code quality vs. behavior</td>
+        </tr>
+        <tr>
+          <td><a href="https://oasb.ai/oasb-2">OASB-2</a> / SOUL.md (OpenA2A)</td>
+          <td>Security behavioral controls</td>
+          <td>Complementary — security controls vs. operational behavior</td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/NateBJones-Projects/ringer">Ringer</a> (Nate B. Jones)</td>
+          <td>Parallel agent orchestration</td>
+          <td>Complementary — orchestration vs. behavioral doctrine</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>License</h2>
+    <p>Apache-2.0. See <a href="LICENSE">LICENSE</a>.</p>
+
+    <h2>Contributing</h2>
+    <p>See <a href="CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
+  </main>
+
+  <footer>
+    <p>Built by <a href="https://wgnr.ai">wgnr.ai</a> — wOS v0.2. Agent behavior, designed.</p>
+  </footer>
+</body>
+</html>
