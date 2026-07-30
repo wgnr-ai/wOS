@@ -71,4 +71,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-*Built by [wgnr.ai](https://wgnr.ai) — wOS v0.2. Human + AI, by design_*
+*Built by [wgnr.ai](https://wgnr.ai) — wOS v0.2. Agent behavior, designed._*
