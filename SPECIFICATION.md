@@ -1,8 +1,8 @@
-# wOS v0.1 — Specification
+# wOS v0.3 — Specification
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.2 (Draft)
+**Version:** 0.3 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
@@ -485,7 +485,7 @@ Agents SHOULD declare their conformance level in their manifest, configuration, 
 
 ```
 wOS conformance: Level 2 (Extended)
-Version: 0.2
+Version: 0.3
 Domains: Communication, Verification, Lifecycle, Escalation, Delegation
 ```
 
@@ -580,16 +580,16 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.2** (Draft). The spec will move to v1.0 when:
+The current version is **v0.3** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
 ### Changelog
 
-- **v0.2 (2026-07-24):** Added code-level enforcement implementations section to Implementation Guidance (principle/enforcement split, enforcement requirements, escalation path from prompt → checks → enforcement). Added Check O (enforcement-verified delegation). Added first reference enforcement implementation: delegation gate for Agent Zero (Directive D1). Additive — no directives, checks, or conformance level definitions changed.
+- **v0.3 (2026-07-24):** Added code-level enforcement implementations section to Implementation Guidance (principle/enforcement split, enforcement requirements, escalation path from prompt → checks → enforcement). Added Check O (enforcement-verified delegation). Added first reference enforcement implementation: delegation gate for Agent Zero (Directive D1). Additive — no directives, checks, or conformance level definitions changed.
 - **v0.1 (2026-07-16):** Initial public draft.
 
 ---
 
-*Built by wgnr.ai — wOS v0.2. Human + AI, by design.*
+*Built by wgnr.ai — wOS v0.3. Human + AI, by design.*
