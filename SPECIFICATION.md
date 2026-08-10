@@ -592,4 +592,4 @@ The current version is **v0.3** (Draft). The spec will move to v1.0 when:
 
 ---
 
-*Built by wgnr.ai — wOS v0.3. Human + AI, by design.*
+*Built by wgnr.ai — wOS v0.3. Agent behavior, designed.*
