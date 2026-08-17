@@ -29,9 +29,9 @@ from helpers.print_style import PrintStyle
 # ─── Defaults (provisional, tunable via default_config.yaml) ──────────────────
 
 DEFAULT_ORCHESTRATOR_PROFILES = [
-    "wgnr-ai",
-    "project_account_manager",
-    "wgnr_project_dev",
+    "orchestrator",
+    "main-agent",
+    "project-manager",
 ]
 
 # Provisional: responses under this word count are allowed without delegation.

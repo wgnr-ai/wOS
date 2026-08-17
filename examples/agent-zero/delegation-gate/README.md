@@ -1,72 +1,74 @@
-# Delegation Gate — wOS Directive D1 Enforcement (Agent Zero)
-
-**Reference implementation of wOS Directive D1 (Delegation is the default) at enforcement level.**
-
-Part of [wOS v0.2](../../SPECIFICATION.md) — the open behavioral design standard for AI agents.
+# Delegation Gate Plugin
 
 ## What It Does
 
-Prevents orchestrator-class agents from terminating their response loop with a deliverable unless they have delegated via `call_subordinate` at some point in the conversation. Enforces the wOS principle "orchestrators plan, delegate, and review — they do not execute" at the code level, not just in prompts.
+The Delegation Gate prevents orchestrator-class agents from terminating the response loop without proof of delegation. When an orchestrator agent attempts to deliver a final response (via the `response` tool) without having called `call_subordinate` at any point in the conversation, the gate:
 
-## Why It Exists
+1. **Blocks loop termination** — sets `response.break_loop = False`, preventing the agent loop from ending.
+2. **Injects a warning** — adds a `hist_add_warning()` message directing the agent to delegate.
+3. **Gives the model another iteration** — the agent loop continues, and the model sees the warning on its next prompt rebuild, forcing it to delegate before delivering its response.
 
-Prompt-only delegation directives ("MUST NOT do the work yourself") fail in production. Orchestrator agents read the rules, understand them, and skip them when it's faster to do the work inline. Evidence from three independent multi-agent projects (2026-07-23): agents articulated the correct delegation workflow when questioned, then chose to bypass it for task efficiency. Code-level enforcement closes the gap between knowing the rule and following it.
-
-## How It Works
-
-1. **Hook:** Intercepts the `response` tool at Agent Zero's `tool_execute_after` extension point — after `tool.execute()` but before the `break_loop` check that terminates the agent loop.
-
-2. **Checks (binary gate, no text classification):**
-   - Is the agent's profile in the `orchestrator_profiles` config list?
-   - Has `call_subordinate` appeared in the conversation's tool history?
-   - Is the response longer than the configurable word threshold (default: 150 words)?
-
-3. **Enforcement:** If all three conditions hold (orchestrator + no delegation + long response), the extension:
-   - Sets `response.break_loop = False` (the `Response` object is a mutable dataclass passed by reference — the loop-termination check at `agent.py` reads the mutated value)
-   - Injects a `hist_add_warning()` into the conversation history with a delegation directive
-   - The agent loop continues; the model sees the warning on its next prompt rebuild and must delegate before it can deliver
-
-4. **Proven pattern:** Uses the same `response.break_loop = False` interception that Agent Zero's Telegram integration plugin uses for intermediate message delivery.
+This implements **Directive D1** (Delegation is the default) from the wOS specification at **Level 3 (Strict)** conformance.
 
 ## Installation
 
-Copy the `delegation-gate/` directory into your Agent Zero instance at:
-
-```
-/a0/usr/plugins/_delegation_gate/
-```
-
-Plugins are enabled by default. Configure orchestrator profiles and word threshold in `default_config.yaml`. Restart the container to load.
+1. Copy the `delegation-gate-plugin/` directory into your Agent Zero plugins directory (typically `usr/plugins/`).
+2. Rename the directory to `_delegation_gate/` (the underscore prefix is Agent Zero convention for plugins that should load first).
+3. Ensure the plugin is enabled in your framework settings. Agent Zero auto-discovers plugins with a valid `plugin.yaml`.
 
 ## Configuration
 
-See `default_config.yaml`:
+Edit `default_config.yaml` to customize behavior:
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `enabled` | `true` | Enable/disable the gate |
-| `orchestrator_profiles` | `["wgnr-ai", "project_account_manager", "wgnr_project_dev", "cct-pm"]` | Agent profiles subject to the gate. Add your orchestrator profiles here. |
-| `word_threshold` | `150` | Responses under this word count are allowed without delegation (acknowledgments, routing, status). Tune based on false positive rate. |
-| `warning_message` | (see file) | The remand message injected into history when the gate fires |
+```yaml
+enabled: true
 
-## Limitations (v1)
+# Add YOUR orchestrator agent profile names here
+orchestrator_profiles:
+  - orchestrator
+  - main-agent
+  - project-manager
 
-- **Response-time only.** The gate intercepts the `response` tool, not other tools (`text_editor`, `code_execution_tool`). An orchestrator can still do work inline via tools and deliver a short summary that passes the word threshold. Mitigate with prompt-level anti-patterns and DOX rules. A tool-time gate is a future enhancement.
-- **Word-threshold heuristic.** Compact deliverables under the threshold pass; legitimate long-form orchestrator communication may be blocked. Tunable via config; monitor and adjust.
-- **History scope.** Delegation evidence from summarized/compressed conversation topics is lost (individual `tool_name` fields are replaced by summaries). The gate catches within-conversation bypasses, not cross-session ones.
+word_threshold: 150
+
+warning_message: "DELEGATION GATE: You are an orchestrator. You must delegate this work via call_subordinate before responding. Route to the appropriate specialist."
+```
+
+**Critical:** You MUST add your actual orchestrator agent profile names to the `orchestrator_profiles` list. The defaults (`orchestrator`, `main-agent`, `project-manager`) are examples — replace them with the profile names used in your deployment.
+
+## How It Works
+
+The gate uses the `tool_execute_after` extension hook, which fires after a tool's `execute()` method runs but before the agent loop checks `break_loop` to decide whether to terminate.
+
+### Hook flow:
+
+1. The agent loop calls `tool.execute()` for the `response` tool.
+2. After `execute()` returns, the framework fires `tool_execute_after` extensions in alphabetical order by filename.
+3. The delegation gate's `execute()` method receives the `Response` object (mutable, passed by reference).
+4. If all three gate conditions are met (orchestrator profile + no `call_subordinate` in history + response exceeds word threshold), it sets `response.break_loop = False`.
+5. The agent loop sees `break_loop = False` and continues, giving the model another iteration.
+6. The injected warning message tells the model to delegate before responding.
+
+## Proven Precedent
+
+The Telegram integration plugin (`_telegram_integration`) uses this exact pattern for a different purpose — intercepting the response tool via `tool_execute_after` and setting `response.break_loop = False` to prevent loop termination for intermediate message delivery. The delegation gate applies the same mechanism for behavioral enforcement.
+
+## Known Limitations (v1)
+
+- **Response-time only:** The gate intercepts the `response` tool, not other tools (`text_editor`, `code_execution`). An orchestrator can still do work inline via tools and deliver a short summary that passes the word threshold. A tool-time gate is a future enhancement.
+- **Word threshold heuristic:** The 150-word threshold is configurable and provisional. False negatives are possible for compact deliverables under the threshold. False positives are possible for legitimate long-form orchestrator communication. Tunable via `default_config.yaml`.
+- **History scan scope:** Delegation evidence from summarized/compressed conversation topics is lost (individual `tool_name` fields are replaced with summary strings). The gate catches within-conversation bypasses, not cross-session ones.
 
 ## Conformance Declaration
 
 ```
-wOS conformance: Level 2 (Extended) + Directive D1 enforcement
-Enforcement: Delegation gate (tool_execute_after hook)
-Platform: Agent Zero v2.5+ (verified on v2.6)
+Directive D1: Level 3 (Strict)
+Enforcement: Delegation gate plugin (tool_execute_after hook)
+Platform: Agent Zero v2.5+
+Verified: 2026-07-24 (10/10 test scenarios passed)
+Limitations: Response-time only, word-threshold heuristic, within-conversation scope
 ```
 
-## Testing
+---
 
-The gate was verified with 10 scenarios covering: orchestrator bypass blocked, short-response exemption, subordinate exemption, delegation-then-synthesis pass, non-response tool pass, threshold boundary (150/151 words), and empty-topics edge case. All passed.
-
-## License
-
-Apache-2.0 (same as wOS).
+*wOS Delegation Gate — Human + AI, by design. Apache-2.0 licensed.*
