@@ -1,6 +1,6 @@
 # Delegation Doctrine
 
-Part of [wOS v0.5](../SPECIFICATION.md) — the open behavioral design standard for AI agents.
+Part of [wOS v0.6](../SPECIFICATION.md) — the open behavioral design standard for AI agents.
 
 See [SPECIFICATION.md §3.5](../SPECIFICATION.md#35-delegation) for the full delegation domain specification.
 

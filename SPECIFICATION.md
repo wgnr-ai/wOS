@@ -1,13 +1,13 @@
-# wOS v0.5 — Specification
+# wOS v0.6 — Specification
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.5 (Draft)
+**Version:** 0.6 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
 **Domain:** wos.wgnr.ai
-**Date:** 2026-08-19
+**Date:** 2026-08-20
 
 ---
 
@@ -467,7 +467,7 @@ Add the relevant directives to the agent's system prompt. This is the lowest-fri
 
 **Example for Core conformance:**
 ```
-You are an AI agent operating under wOS v0.1 Core conformance.
+You are an AI agent operating under wOS v0.6 Core conformance.
 
 At session start (Directive L1):
 1. Load relevant memories from prior sessions.
@@ -516,6 +516,52 @@ wOS conformance: Level 2 (Extended) + Directive D1 enforcement
 Enforcement: Delegation gate (tool_execute_after hook)
 Platform: Agent Zero v2.6
 ```
+
+### Machine-readable conformance manifest
+
+Prose declarations serve humans. For registries, marketplaces, orchestrators vetting subordinate agents, and CI gates, conformance SHOULD also be expressed as a machine-readable manifest: a `wos-conformance.json` file at the project root.
+
+```json
+{
+  "spec_version": "0.6",
+  "conformance_level": 2,
+  "domains": ["communication", "verification", "lifecycle", "escalation", "delegation"],
+  "directives": {
+    "C1": { "implementation": "prompt" },
+    "V6": { "implementation": "skill", "enforcement": "pre-delivery Check P" },
+    "D1": { "implementation": "code-gate", "enforcement": "delegation gate (tool_execute_after hook)" }
+  },
+  "checks_implemented": ["A", "B", "C", "P"],
+  "evidence": {
+    "check_results": "https://example.org/audit/wos_check_results",
+    "citations": "https://example.org/audit/wos_citations"
+  },
+  "generated": "2026-08-20",
+  "generated_by": "agent-profile@platform"
+}
+```
+
+Field semantics:
+
+| Field | Required | Meaning |
+|---|---|---|
+| `spec_version` | yes | wOS version the manifest targets. The manifest is valid only against this version. |
+| `conformance_level` | yes | 1 (Core), 2 (Extended), or 3 (Strict). |
+| `domains` | yes | Doctrine domains implemented; must match the level's domain set (§4). |
+| `directives.<ID>.implementation` | per directive claimed | One of `prompt`, `skill`, `config`, `code-gate`. |
+| `directives.<ID>.enforcement` | no | Named enforcement mechanism, when a code gate or structural check exists. |
+| `checks_implemented` | no | Check letters (see Recommended pre-delivery checks) the implementation runs. |
+| `evidence.<store>` | no | URI (file path, endpoint, or dataset) where verification artifacts are inspectable. |
+| `generated` / `generated_by` | yes | ISO date and declaring identity, for staleness assessment. |
+
+**Honesty rules.** A manifest is a set of specific claims and is subject to Directive V3 (cite or strip) like any other:
+
+1. **Declared is not enforced.** `implementation: "prompt"` asserts advisory delivery only. Consumers SHOULD weight `code-gate` with a named enforcement mechanism above `prompt`, `skill`, and `config` claims.
+2. **No evidence, no badge.** A conformance-level claim backed by neither a code-level enforcement mechanism nor an `evidence` pointer is *declared* conformance. Registries and marketplaces ingesting manifests MUST NOT display declared conformance as verified conformance.
+3. **Level claims are domain-bounded.** `conformance_level` is valid only if every domain required by that level (§4) is present in `domains` with its directives implemented. Partial coverage means the highest fully satisfied level — nothing more.
+4. **Staleness applies.** A manifest targeting an older `spec_version` remains valid (directives are stable), but consumers SHOULD surface the version gap.
+
+The manifest format is versioned with the spec and additive-only until v1.0: consumers SHOULD ignore unrecognized fields rather than reject the manifest.
 
 ### Code-level enforcement implementations
 
@@ -603,12 +649,14 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.5** (Draft). The spec will move to v1.0 when:
+The current version is **v0.6** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
 ### Changelog
+
+- **v0.6 (2026-08-20):** Added machine-readable conformance manifest to Implementation Guidance (§5): `wos-conformance.json` schema — `spec_version`, `conformance_level`, `domains`, per-directive implementation mode (`prompt`/`skill`/`config`/`code-gate`), `checks_implemented`, and `evidence` pointers — with honesty rules (declared is not enforced; no evidence, no badge; level claims are domain-bounded; staleness applies). Origin: agent-capability registries and marketplaces currently publish artifact-level trust signals only (stars, freshness, maintenance — e.g. TrueFoundry Skills Registry, OpenAgentSkill, tech-leads-club agent-skills; scanned 2026-08-20) with no behavioral conformance dimension, and self-attested quality tiers are an active failure mode in the category (AaaS Vault, agents-as-a-service.com; canonical repo `github.com/ibossyNr1/aaas-vault` returned 404 on 2026-08-20, mirror `joshuaolds/aaas-vault`). The manifest makes wOS conformance machine-ingestible by such registries without a central certifying authority: conformance claims become specific values subject to Directive V3. Additive — no existing directives, checks, or conformance level definitions changed. Ratification: delegated Principal ratification, 2026-08-20 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 
 - **v0.5 (2026-08-19):** Added Directive C4 (Model the human counterpart before timing judgments) to the Communication domain, with an urgency carve-out — an explicit approaching deadline overrides the patience default; compliance check deferred pending Level-2 promotion review. Added Governance section (§9): authority chain (Principal / reviewer of record / plugin propagation), amendment workflow, and version-gate rules. Origin of the governance section: v0.3–v0.4 shipped upstream without recorded review at the reviewer-of-record role (found 2026-08-19). Reconciled docs/index.md version references (v0.2 → v0.5). Additive — no existing directives, checks, or conformance level definitions changed.
 
@@ -647,4 +695,4 @@ External contributions follow CONTRIBUTING.md and enter this workflow at step 3 
 
 ---
 
-*Built by wgnr.ai — wOS v0.5. Agent behavior, designed.*
+*Built by wgnr.ai — wOS v0.6. Agent behavior, designed.*

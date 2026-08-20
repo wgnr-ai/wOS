@@ -1,6 +1,6 @@
 # Escalation Doctrine
 
-Part of [wOS v0.1](../SPECIFICATION.md) — the open behavioral design standard for AI agents.
+Part of [wOS v0.6](../SPECIFICATION.md) — the open behavioral design standard for AI agents.
 
 See [SPECIFICATION.md §3](../SPECIFICATION.md#3-the-six-doctrine-domains) for the full escalation domain specification.
 
