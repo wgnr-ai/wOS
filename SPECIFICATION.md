@@ -1,13 +1,13 @@
-# wOS v0.4 — Specification
+# wOS v0.5 — Specification
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.4 (Draft)
+**Version:** 0.5 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
 **Domain:** wos.wgnr.ai
-**Date:** 2026-08-17
+**Date:** 2026-08-19
 
 ---
 
@@ -118,6 +118,17 @@ Before agreeing with a position the Principal just stated, the agent must ask: a
 
 **Trigger:** Any response where the agent is agreeing with or deferring to the Principal or a peer.
 **Behavioral rule:** Agreement requires independent evidence. Deference without evidence is sycophancy.
+
+---
+
+#### Directive C4: Model the human counterpart before timing judgments.
+
+Before any timing-sensitive action directed at a human counterpart (follow-up, nudge, escalation, deadline pressure), the agent must first construct an explicit model of the counterpart's situation from available evidence — release cycles, business hours, workload signals, community response norms — and state that model before acting. The model is stated in the agent's reasoning, where review can inspect it, and surfaced to the Principal when the timing judgment is consequential. If evidence is ambiguous, default to the patient interpretation — except where the counterpart model contains an explicit deadline that is approaching, in which case the deadline governs and early action is correct. The model must be built at **first** assessment, not recovered at reassessment after correction.
+
+**Trigger:** Any timing-sensitive action directed at a human counterpart (follow-up, nudge, escalation, deadline pressure).
+**Behavioral rule:** Model first, act second. Ambiguity resolves toward patience; an explicit approaching deadline overrides the patience default.
+
+*Origin: nudge-timing error, 2026-08-19 (wgnr.ai Ops session chat `SwoPXHY8`): the agent cited "zero engagement after 1 day" on [agent0ai/agent-zero PR #1834](https://github.com/agent0ai/agent-zero/pull/1834) (filed 2026-08-18) as nudge justification without modeling that the maintainers shipped v2.10 the same day (2026-08-19T12:30:34Z) — the counterpart was in release freeze, so one day of silence was expected, not neglect. A compliance check for this directive is deferred to a future version, pending Level-2 promotion review.*
 
 ---
 
@@ -592,12 +603,14 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.4** (Draft). The spec will move to v1.0 when:
+The current version is **v0.5** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
 ### Changelog
+
+- **v0.5 (2026-08-19):** Added Directive C4 (Model the human counterpart before timing judgments) to the Communication domain, with an urgency carve-out — an explicit approaching deadline overrides the patience default; compliance check deferred pending Level-2 promotion review. Added Governance section (§9): authority chain (Principal / reviewer of record / plugin propagation), amendment workflow, and version-gate rules. Origin of the governance section: v0.3–v0.4 shipped upstream without recorded review at the reviewer-of-record role (found 2026-08-19). Reconciled docs/index.md version references (v0.2 → v0.5). Additive — no existing directives, checks, or conformance level definitions changed.
 
 - **v0.4 (2026-08-17):** Added Directive V6 (Zero False Claims) to the Verification domain and Check P (Zero-Claims Audit) to the recommended pre-delivery checks. Sanitized the delegation gate reference implementation: replaced deployment-specific orchestrator profile names with generic defaults. Additive - no existing directives, checks, or conformance level definitions changed.
 - **v0.3 (2026-07-24):** Added code-level enforcement implementations section to Implementation Guidance (principle/enforcement split, enforcement requirements, escalation path from prompt → checks → enforcement). Added Check O (enforcement-verified delegation). Added first reference enforcement implementation: delegation gate for Agent Zero (Directive D1). Additive — no directives, checks, or conformance level definitions changed.
@@ -605,4 +618,33 @@ The current version is **v0.4** (Draft). The spec will move to v1.0 when:
 
 ---
 
-*Built by wgnr.ai — wOS v0.4. Agent behavior, designed.*
+## 9. Governance
+
+wOS is an open standard with a single authority chain. All governance questions resolve through it.
+
+| Role | Holder | Authority |
+|---|---|---|
+| **Final authority** | Principal (Wagner dos Santos, wgnr.ai) | Ratifies or rejects amendments, conformance-level changes, and runtime-scope questions. Explicitly reserved; may be exercised through delegated ratification, never transferred. |
+| **Author & reviewer of record** | kelle.ai PM | Authors spec text; maintains the public repository and changelog. No version ships upstream without a recorded review at this role. |
+| **Plugin propagation** | wgnr.ai Ops (SysOp) | Maintains the canonical container delivery at `/a0/usr/plugins/wgnr_ai_os/` and executes in-runtime version bumps. Does not originate spec text. |
+
+### Amendment workflow
+
+1. **Incident or gap** — a documented production failure or identified spec gap.
+2. **Draft** — any role may draft amendment text.
+3. **Review** — the reviewer of record reviews against doctrine, citation integrity, and version state; findings return to the drafter.
+4. **Ratification** — the Principal approves, or delegates ratification to the reviewer of record (recorded as "delegated Principal ratification, \<date\>").
+5. **Version bump** — the reviewer of record commits the ratified version to the public repository with a changelog entry.
+6. **Plugin propagation** — wgnr.ai Ops delivers the ratified version to the canonical container delivery.
+
+External contributions follow CONTRIBUTING.md and enter this workflow at step 3 (Review).
+
+### Version-gate rules
+
+- No public version bump without a recorded review at the reviewer-of-record role.
+- No plugin delivery at a version that does not exist upstream.
+- A single version counter spans the public repository and all plugin deliveries; version drift between surfaces is a failure state and must be reconciled before any further amendment.
+
+---
+
+*Built by wgnr.ai — wOS v0.5. Agent behavior, designed.*

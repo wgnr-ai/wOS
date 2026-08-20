@@ -42,6 +42,8 @@ For behavioral changes (new directives, modified checks, conformance level chang
 2. Discuss with the community
 3. Submit a pull request after consensus
 
+Behavioral changes are ratified through the governance workflow in [SPECIFICATION.md §9](SPECIFICATION.md) before merge.
+
 ## Code of conduct
 
 Be direct. Be evidence-based. Be respectful. wOS is about making agents behave well — the same standard applies to contributors.
