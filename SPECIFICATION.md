@@ -505,7 +505,7 @@ Agents SHOULD declare their conformance level in their manifest, configuration, 
 
 ```
 wOS conformance: Level 2 (Extended)
-Version: 0.4
+Version: 0.6
 Domains: Communication, Verification, Lifecycle, Escalation, Delegation
 ```
 
