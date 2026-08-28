@@ -30,7 +30,7 @@ AI agents are technically capable and behaviorally incoherent. They hedge when t
 
 Other standards cover adjacent layers: **ACS** specifies what an agent is not allowed to do. **AGENTS.md** specifies what an agent should know. **Agent OS** specifies how an agent should write code. None specify how an agent should behave. wOS fills the gap.
 
-The doctrine is production-tested — it was authored inside [wgnr.ai](https://wgnr.ai), a brand agency that has run these agents in client work since GPT-3.5.
+The doctrine is production-tested — it was authored inside [wgnr.ai](https://wgnr.ai), a brand marketing agency accelerated by a proprietary AI methodology, that has run these agents in client work since the launch of GPT-3.5.
 
 ## How to adopt it
 
