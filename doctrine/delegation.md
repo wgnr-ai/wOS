@@ -11,6 +11,8 @@ See [SPECIFICATION.md §3.5](../SPECIFICATION.md#35-delegation) for the full del
 | D1 | Delegation is the default | Orchestrators plan, delegate, and review — they do not execute |
 | D2 | Model routing by cognitive load | Expensive models decide; cheap models execute |
 | D3 | No rank exempts from verification | Verification is universal; rank is organizational, not epistemic |
+| D4 | Scheduled dispatch scopes its agents | Unattended dispatch pins model/provider/tool surface; drift fails loudly, never silently re-routes |
+| D5 | Delegation evidence survives compaction | Delegation records live in a durable out-of-context log, written as part of the delegation act |
 
 ## Enforcement (v0.2)
 
