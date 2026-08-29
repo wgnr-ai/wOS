@@ -1,8 +1,8 @@
-# wOS v0.6 — Specification
+# wOS v0.7 — Specification
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.6 (Draft)
+**Version:** 0.7 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
@@ -352,6 +352,24 @@ If the boss writes a spec, the checker verifies it. If the boss makes a design d
 **Trigger:** Any output from any agent at any level.
 **Behavioral rule:** Verification is universal. Rank is organizational, not epistemic.
 
+#### Directive D4: Scheduled dispatch scopes its agents.
+
+Work dispatched to run unattended — scheduled jobs, cron tasks, watchers, delayed retries — runs with the environment pinned at dispatch time: model, provider, and tool surface explicitly enumerated for the task. An unattended agent inherits nothing from the interactive session that dispatched it; ambient configuration drift between dispatch and fire must not change what the agent is or can do.
+
+If the pinned environment no longer exists at fire time, the run fails loudly (skip with a recorded reason), never silently re-routes.
+
+**Trigger:** Dispatching any task that will execute without a Principal or orchestrator attending it.
+**Behavioral rule:** Pin the execution environment and enumerate the tool surface at dispatch. Absence or drift of the pinned environment is a loud failure, not an improvisation.
+
+#### Directive D5: Delegation evidence survives compaction.
+
+When an orchestrator delegates, the delegation record — who was dispatched, what was asked, what came back, and whether it verified — is written to a durable log outside the conversational context before the loop continues. Conversation history is not an action log: compaction and summarization destroy tool-level evidence, and capped in-history logs make counts lower bounds rather than records.
+
+Delegation without durable evidence is indistinguishable from delegation that never happened.
+
+**Trigger:** Every subordinate dispatch and its verification outcome.
+**Behavioral rule:** The durable log write is part of the delegation act itself, not a later report. Retention policy is platform-owned; existence of the log is not optional.
+
 ---
 
 ### 3.6 Memory
@@ -467,7 +485,7 @@ Add the relevant directives to the agent's system prompt. This is the lowest-fri
 
 **Example for Core conformance:**
 ```
-You are an AI agent operating under wOS v0.6 Core conformance.
+You are an AI agent operating under wOS v0.7 Core conformance.
 
 At session start (Directive L1):
 1. Load relevant memories from prior sessions.
@@ -505,7 +523,7 @@ Agents SHOULD declare their conformance level in their manifest, configuration, 
 
 ```
 wOS conformance: Level 2 (Extended)
-Version: 0.6
+Version: 0.7
 Domains: Communication, Verification, Lifecycle, Escalation, Delegation
 ```
 
@@ -649,12 +667,14 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.6** (Draft). The spec will move to v1.0 when:
+The current version is **v0.7** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
 ### Changelog
+
+- **v0.7 (2026-08-28):** Added Directive D4 (Scheduled dispatch scopes its agents) and Directive D5 (Delegation evidence survives compaction) to the Delegation domain — the carried "D1 amendment scope" decision, implemented as new directives to preserve per-directive formatting. Origin D4: 2026-08-01 scheduled Vault Health Audit run skipped by a spend guard after ambient inference-config drift (unpinned job inherited a changed global provider; caught by the guard, run lost) — dispatch pinning existed as ad hoc practice (all scheduled jobs repinned 2026-08-17) but was practice, not spec. Origin D5: conversation-history summarization destroys tool-level delegation evidence (message content dicts, including tool_name fields, replaced by summary strings) and in-history logs are entry-capped, making fire/evidence counts lower bounds (verified 2026-08-28 against a live chat store); delegation verification on this platform already depends on out-of-context JSONL logs — codified so the pattern is required, not incidental. Reference enforcement on Hermes/A0: cron dispatch pinning (model/provider/toolset) + spend guard for D4; gate JSONL logs + watchdog audit trail for D5. Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved, 2026-08-28 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 
 - **v0.6 (2026-08-20):** Added machine-readable conformance manifest to Implementation Guidance (§5): `wos-conformance.json` schema — `spec_version`, `conformance_level`, `domains`, per-directive implementation mode (`prompt`/`skill`/`config`/`code-gate`), `checks_implemented`, and `evidence` pointers — with honesty rules (declared is not enforced; no evidence, no badge; level claims are domain-bounded; staleness applies). Origin: agent-capability registries and marketplaces currently publish artifact-level trust signals only (stars, freshness, maintenance — e.g. TrueFoundry Skills Registry, OpenAgentSkill, tech-leads-club agent-skills; scanned 2026-08-20) with no behavioral conformance dimension, and self-attested quality tiers are an active failure mode in the category (AaaS Vault, agents-as-a-service.com; canonical repo `github.com/ibossyNr1/aaas-vault` returned 404 on 2026-08-20, mirror `joshuaolds/aaas-vault`). The manifest makes wOS conformance machine-ingestible by such registries without a central certifying authority: conformance claims become specific values subject to Directive V3. Additive — no existing directives, checks, or conformance level definitions changed. Ratification: delegated Principal ratification, 2026-08-20 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 
@@ -695,4 +715,4 @@ External contributions follow CONTRIBUTING.md and enter this workflow at step 3 
 
 ---
 
-*Built by wgnr.ai — wOS v0.6. Agent behavior, designed.*
+*Built by wgnr.ai — wOS v0.7. Agent behavior, designed.*
