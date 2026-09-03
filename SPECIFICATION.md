@@ -1,8 +1,8 @@
-# wOS v0.7 — Specification
+# wOS v0.8 — Specification
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.7 (Draft)
+**Version:** 0.8 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
@@ -204,6 +204,15 @@ Every factual claim about system state, configuration, file existence, tool capa
 **Behavioral rule:** Verify or strip. There is no third state.
 
 **Conformance:** Level 2 (Extended) minimum — Check P enforces structurally. Level 3 (Strict) on platforms with pre-response verification gate enforcement implemented.
+
+#### Directive V7: Exact-read discipline for image inputs.
+
+Every value extracted from an image input (chart, screenshot, scan, photo, table rendered as pixels) MUST be transcribed verbatim into the agent's working context before it is used in reasoning or output — and into the output itself whenever the value is cited. An unreadable value is transcribed as `[unreadable]`; substituting a plausible value is a fabrication. Visual shape observations ("the plotted line descends left-to-right") are observations, not data — a quantitative claim requires a cited transcribed value. If image fidelity prevents transcribing a value the task depends on, the agent MUST state the gap and request a higher-fidelity source instead of emitting a low-confidence number.
+
+**Trigger:** Every value extracted from an image input, before it is used in reasoning or output.
+**Behavioral rule:** Transcribe verbatim, mark unreadable, never substitute. Shape is observation; numbers are data.
+
+**Conformance:** Level 2 (Extended) minimum. Applies only to vision-capable agents and only to values the task actually uses.
 
 ---
 
@@ -485,7 +494,7 @@ Add the relevant directives to the agent's system prompt. This is the lowest-fri
 
 **Example for Core conformance:**
 ```
-You are an AI agent operating under wOS v0.7 Core conformance.
+You are an AI agent operating under wOS v0.8 Core conformance.
 
 At session start (Directive L1):
 1. Load relevant memories from prior sessions.
@@ -523,7 +532,7 @@ Agents SHOULD declare their conformance level in their manifest, configuration, 
 
 ```
 wOS conformance: Level 2 (Extended)
-Version: 0.7
+Version: 0.8
 Domains: Communication, Verification, Lifecycle, Escalation, Delegation
 ```
 
@@ -667,12 +676,14 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.7** (Draft). The spec will move to v1.0 when:
+The current version is **v0.8** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
 ### Changelog
+
+- **v0.8 (2026-09-02):** Added Directive V7 (Exact-read discipline for image inputs) to the Verification domain — verbatim transcription of every value extracted from an image before use in reasoning or output, `[unreadable]` over plausible substitution, visual shape observations distinguished from quantitative claims, and a state-the-gap duty when image fidelity prevents transcription. Origin: 2026-09-02 fleet audit found 57 agents across 12 projects running vision-capable presets, including medical (imaging, lab results), legal (document images), and market-analysis workloads where a guessed number becomes a false citable claim. Capability-based language throughout — no model or vendor names (per standing convention). Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved, 2026-09-02 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 
 - **v0.7 (2026-08-28):** Added Directive D4 (Scheduled dispatch scopes its agents) and Directive D5 (Delegation evidence survives compaction) to the Delegation domain — the carried "D1 amendment scope" decision, implemented as new directives to preserve per-directive formatting. Origin D4: 2026-08-01 scheduled Vault Health Audit run skipped by a spend guard after ambient inference-config drift (unpinned job inherited a changed global provider; caught by the guard, run lost) — dispatch pinning existed as ad hoc practice (all scheduled jobs repinned 2026-08-17) but was practice, not spec. Origin D5: conversation-history summarization destroys tool-level delegation evidence (message content dicts, including tool_name fields, replaced by summary strings) and in-history logs are entry-capped, making fire/evidence counts lower bounds (verified 2026-08-28 against a live chat store); delegation verification on this platform already depends on out-of-context JSONL logs — codified so the pattern is required, not incidental. Reference enforcement on Hermes/A0: cron dispatch pinning (model/provider/toolset) + spend guard for D4; gate JSONL logs + watchdog audit trail for D5. Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved, 2026-08-28 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 
@@ -715,4 +726,4 @@ External contributions follow CONTRIBUTING.md and enter this workflow at step 3 
 
 ---
 
-*Built by wgnr.ai — wOS v0.7. Agent behavior, designed.*
+*Built by wgnr.ai — wOS v0.8. Agent behavior, designed.*
