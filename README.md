@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/wos-logo-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="assets/wos-lockup-readme-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/wos-logo-light.png">
     <img alt="wOS v0.8 — Agent behavior, designed." width="300">
   </picture>
 </p>
