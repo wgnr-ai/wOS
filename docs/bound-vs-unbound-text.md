@@ -17,7 +17,7 @@ Everything an agent emits about its own work falls into one of two buckets. Both
 | 1 | **Tell-me (unbound)** | "I saved the file." | Costs nothing to write whether or not it happened |
 | 2 | Tell-me (unbound) | "The tests passed." | A story about reality, not reality |
 | 3 | Tell-me (unbound) | "I checked and it's fine." | Indistinguishable from fabrication by reading alone |
-| 4 | **Show-me (bound)** | `ls` output listing the file | Physically cannot exist unless the file exists |
+| 4 | **Show-me (bound)** | `ls` output listing the file | A trusted tool's observation at run time — not a guarantee of later state |
 | 5 | Show-me (bound) | Exit code 0 from the test runner | Produced by the tool as a side-effect of running |
 | 6 | Show-me (bound) | Log line / JSONL delegation record / file hash | Written during the action, survives outside conversation context |
 
@@ -55,7 +55,7 @@ The rule in one sentence: **treat every claim as a to-do for verification; accep
 | **V2** — Action claim verification (§3.2) | Past-tense action claims require tool verification before delivery | Tell-me is never accepted for did-it claims |
 | **V5** — Open-before-claim (§3.2) | File/directory claims require reading that file in the same turn | State claims need show-me from this turn |
 | **V6** — Zero false claims (§3.2, enforced by Check P) | Pattern-matched inferences ("key exists = active") banned | Proximity to evidence is not evidence |
-| **D5** — Delegation evidence survives compaction (§3.5) | Delegation records written to durable JSONL outside conversation | The memory of the action, not the narration of it, is the record |
+| **D5** — Delegation evidence survives compaction (§3.5) | Delegation records written to a durable log outside the conversation (JSONL in the reference implementation; the directive is format-agnostic) | The memory of the action, not the narration of it, is the record |
 | Code-level enforcement (§5) | Reference implementations that intercept the response path | Enforcement that cannot be talked past |
 | File guards (versioned backup rotation) | Automatic versioned backups on protected writes | The write's own byproduct proves the write |
 
