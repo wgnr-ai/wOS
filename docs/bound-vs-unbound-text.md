@@ -1,8 +1,8 @@
 # Bound vs. Unbound Text — Design Rationale for wOS Verification Checks
 
-**Type:** Design rationale (non-normative) — this essay explains why the verification directives exist. It is not specification text; it adds no directives, no checks, and no conformance requirements. Where this essay and the Specification disagree, the Specification governs.
-**Date:** 2026-09-17 (reviewed and ratified 2026-09-22)
-**Applies to:** wOS Specification v0.8 — §3.2 Verification, §3.5 Delegation, §5 Implementation Guidance
+- **Type:** Design rationale (non-normative) — this essay explains why the verification directives exist. It is not specification text; it adds no directives, no checks, and no conformance requirements. Where this essay and the Specification disagree, the Specification governs.
+- **Date:** 2026-09-17 (reviewed and ratified 2026-09-22)
+- **Applies to:** wOS Specification v0.8 — §3.2 Verification, §3.5 Delegation, §5 Implementation Guidance
 
 ## Summary
 
