@@ -1,0 +1,24 @@
+{
+  "spec_version": "0.8",
+  "conformance_level": 1,
+  "domains": ["communication", "verification", "lifecycle"],
+  "directives": {
+    "C1": { "implementation": "prompt" },
+    "C2": { "implementation": "prompt" },
+    "C3": { "implementation": "prompt" },
+    "C4": { "implementation": "prompt" },
+    "V1": { "implementation": "skill" },
+    "V2": { "implementation": "skill" },
+    "V3": { "implementation": "skill" },
+    "V4": { "implementation": "skill" },
+    "V5": { "implementation": "skill" },
+    "V6": { "implementation": "skill", "enforcement": "pre-delivery Check P" },
+    "V7": { "implementation": "skill", "enforcement": "pre-delivery Check H (image values)" },
+    "L1": { "implementation": "prompt" },
+    "L2": { "implementation": "prompt" }
+  },
+  "checks_implemented": ["A", "B", "C", "E", "H", "I", "J", "K", "L", "P"],
+  "evidence": {},
+  "generated": "REPLACE_WITH_ISO_DATE",
+  "generated_by": "REPLACE_WITH_YOUR_AGENT_IDENTITY"
+}

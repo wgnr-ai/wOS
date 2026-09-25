@@ -9,7 +9,7 @@
 <h3 align="center">The open behavioral design standard for AI agents.</h3>
 
 <p align="center">
-  <a href="SPECIFICATION.md">Read the Spec</a> · <a href="docs/bound-vs-unbound-text.md">Design Rationale</a> · <a href="CONTRIBUTING.md">Contribute</a> · <a href="https://wos.wgnr.ai">Website</a>
+  <a href="SPECIFICATION.md">Read the Spec</a> · <a href="AGENTS.md">Agent Instructions</a> · <a href="templates/">Templates</a> · <a href="docs/bound-vs-unbound-text.md">Design Rationale</a> · <a href="CONTRIBUTING.md">Contribute</a> · <a href="https://wos.wgnr.ai">Website</a>
 </p>
 
 <p align="center">
@@ -34,20 +34,30 @@ The doctrine is production-tested — it was authored inside [wgnr.ai](https://w
 
 ## How to adopt it
 
-1. **Read** the [SPECIFICATION.md](SPECIFICATION.md)
-2. **Add** the wOS directives to your agent's system prompt or runtime configuration
-3. **Validate** against the published compliance checks
-4. **Declare** your conformance level — Core, Extended, or Strict — in your agent's manifest
+1. **Pick** your conformance level — Core, Extended, or Strict (see table below)
+2. **Direct your agent** using the copy-paste prompt in [AGENTS.md](AGENTS.md) — or install [`templates/wos-enforcement.SKILL.md`](templates/wos-enforcement.SKILL.md) as an auto-loading skill
+3. **Validate** against the pre-delivery checks (SPECIFICATION.md §5)
+4. **Declare** your conformance level — the agent's declaration is your confirmation it took
 
 The lowest-friction entry point is the **verification domain**: a single directive that forces the agent to surface what it does not know before it claims completion.
+
+### Tell your agent
+
+Paste this to your agent (works with any agent that can read a URL or file):
+
+> Adopt the wOS protocol at **Core** conformance. Load `AGENTS.md` at the root of github.com/wgnr-ai/wOS and apply its directives to your own responses from now on. Declare your conformance level before proceeding.
+
+Use **Extended** for orchestrators and multi-agent systems, **Strict** for long-running agents with persistent state. One word does the work: *"read this"* gets you a summary of wOS; *"adopt this at Core conformance"* gets you conformance.
 
 ## Conformance levels
 
 | Level | Domains | Who should adopt |
 |---|---|---|
-| **Core** | Communication + Verification | Any agent that interacts with humans |
+| **Core** | Communication + Verification + Lifecycle | Any agent that interacts with humans |
 | **Extended** | Core + Escalation + Delegation | Multi-agent systems, production orchestrators |
 | **Strict** | Extended + Identity + Memory | Long-running agents with persistent state |
+
+One-line directive digests for every level: [AGENTS.md](AGENTS.md).
 
 ## Competitive landscape
 
