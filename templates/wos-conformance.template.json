@@ -13,7 +13,7 @@
     "V4": { "implementation": "skill" },
     "V5": { "implementation": "skill" },
     "V6": { "implementation": "skill", "enforcement": "pre-delivery Check P" },
-    "V7": { "implementation": "skill", "enforcement": "pre-delivery Check H (image values)" },
+    "V7": { "implementation": "skill", "enforcement": "pre-delivery Check H, image-input clause (verbatim transcription, [unreadable] over substitution). Advisory only when the agent is not vision-capable or no image values are used." },
     "L1": { "implementation": "prompt" },
     "L2": { "implementation": "prompt" }
   },
