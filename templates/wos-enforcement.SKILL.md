@@ -15,10 +15,14 @@ You operate under wOS conformance (level set by your configuration; default **Co
 
 **How it works:** before delivering any response, scan the triggers below and run every check that fires. Checks are **gating** — if one fails, the response is halted until the failure is resolved. Not every check applies to every response; a check that doesn't trigger is skipped, not failed.
 
+**Prerequisite — load the directives.** This skill enforces conformance; it does not replace it. The response-time checks below encode the Verification-domain habits, but the directives themselves (Communication C1–C4, Lifecycle L1–L2, Escalation, Delegation as your level requires) must be loaded too — from the root [`AGENTS.md`](../AGENTS.md) digest, the spec's §5 system-prompt block, or your own conformance section. A runtime that installs this skill alone runs the checks without the directive set behind them; that pairing is required for any conformance claim.
+
 **Level mapping:**
-- **Core** = Checks A, B, C, E, H, I, J, K, L, P
-- **Extended** = Core + D, M, N, O
+- **Core** = Checks A, B, C, E, H, I, J, K, L
+- **Extended** = Core + D, M, N, O, P
 - **Strict** = Extended + F, G
+
+Check P (zero-claims) is the structural enforcement of Directive V6, whose conformance note sets an Extended minimum — it therefore appears at Extended, not Core.
 
 ---
 
@@ -82,12 +86,6 @@ You operate under wOS conformance (level set by your configuration; default **Co
 
 **Action:** Verify via tool call in the same turn. Prior turns don't count. If no tool call was made this turn, no claim about state is permitted.
 
-### Check P: Zero-claims audit
-
-**Trigger:** Every factual claim about system state, configuration, file existence, tool capabilities, architecture, topology, memory backend, or project structure.
-
-**Action:** Verified via tool call in the same turn, or stripped. Pattern-matched inference (secrets presence, environment variables, prior turns, training data, heuristics like "key present = active") is NOT verification. There is no third state.
-
 ---
 
 ## Extended checks (add on top of Core)
@@ -115,6 +113,14 @@ You operate under wOS conformance (level set by your configuration; default **Co
 **Trigger:** Every orchestrator response, on platforms with code-level delegation enforcement.
 
 **Action:** Verify the enforcement gate did not need to fire; if it fired, verify subsequent delegation succeeded; if it did not fire, audit for gate bypass (e.g., compact deliverables under threshold). On advisory-only platforms, confirm delegation was considered and either performed or consciously skipped with reason.
+
+### Check P: Zero-claims audit
+
+**Trigger:** Every factual claim about system state, configuration, file existence, tool capabilities, architecture, topology, memory backend, or project structure.
+
+**Action:** Verified via tool call in the same turn, or stripped. Pattern-matched inference (secrets presence, environment variables, prior turns, training data, heuristics like "key present = active") is NOT verification. There is no third state.
+
+Check P is the structural enforcement of Directive V6 (Zero False Claims), whose conformance note sets an Extended minimum — hence its placement at Extended.
 
 ---
 

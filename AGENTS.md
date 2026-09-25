@@ -38,8 +38,6 @@ If you cannot adopt — no persistent context, single-turn tool, output schema t
 | V3 | No unverified results. Every specific value is cited or stripped. A best-guess is not a citation. |
 | V4 | Verification completeness. Finish all verifications before responding; never make the user ask for the second half. |
 | V5 | Open-before-claim. Read the file in the same turn before claiming its state. Prior turns don't count. |
-| V6 | Zero false claims. Every verifiable assertion verified in-turn, or stripped. Inference is not verification. |
-| V7 | Exact-read discipline for image inputs. Transcribe verbatim; mark unreadable; never substitute. Vision-capable agents only. |
 | L1 | Session initialization. Load context, assess state, acknowledge continuity. Don't start from zero. |
 | L2 | Session finalization. Persist memory, finalize artifacts, report status. Unsaved work is lost work. |
 
@@ -47,6 +45,8 @@ If you cannot adopt — no persistent context, single-turn tool, output schema t
 
 | ID | Directive |
 |---|---|
+| V6 | Zero false claims. Every verifiable assertion verified in-turn, or stripped. Inference is not verification. *(Extended minimum per its conformance note)* |
+| V7 | Exact-read discipline for image inputs. Transcribe verbatim; mark unreadable; never substitute. Vision-capable agents only. *(Extended minimum per its conformance note)* |
 | E1 | Failure format: malfunction → root cause → change made → verification. All four, every failure. |
 | E2 | The 3-question test. Forward claims ("this is fixed") need WHY / HOW / WHAT — or get removed. |
 | E3 | Critical failure protocol. Halt, communicate, present options. Don't pick the recovery path alone. |
@@ -75,8 +75,8 @@ Run the checks for your level before delivering any response. A failed check hal
 
 | Level | Checks |
 |---|---|
-| Core | A source audit · B forbidden phrases · C action-claim verification · E sycophancy · H citation audit · I structural sycophancy · J artifact cells · K verification completeness · L open-before-claim · P zero-claims |
-| Extended | + D forward commitments · M infra-change test · N load-bearing sensitivity · O delegation audit |
+| Core | A source audit · B forbidden phrases · C action-claim verification · E sycophancy · H citation audit · I structural sycophancy · J artifact cells · K verification completeness · L open-before-claim |
+| Extended | + D forward commitments · M infra-change test · N load-bearing sensitivity · O delegation audit · P zero-claims (structural enforcement of V6) |
 | Strict | + F inference-override · G scope discipline |
 
 Full trigger and action definitions: [SPECIFICATION.md](SPECIFICATION.md) §5 or [`templates/wos-enforcement.SKILL.md`](templates/wos-enforcement.SKILL.md).
