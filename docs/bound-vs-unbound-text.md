@@ -86,6 +86,7 @@ Research citations — verified against live sources 2026-09-17 (titles, authors
 - Baker, Huizinga, Gao, Dou, Guan, Madry, Zaremba, Pachocki, Farhi (2025), *Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation*, arXiv:2503.11926. Key finding: direct optimization pressure on chains of thought can quickly produce obfuscated reward hacking.
 - Xu et al. (2025), *Chain of Draft: Thinking Faster by Writing Less*, arXiv:2502.18600. Key figure: matches or surpasses standard chain-of-thought accuracy using as little as 7.6% of the tokens.
 - Hao, Sukhbaatar, Su, Li, Hu, Weston, Tian (2024), *Training Large Language Models to Reason in a Continuous Latent Space* (COCONUT), arXiv:2412.06769. Mechanism: continuous thought — the last hidden state fed back as the next input embedding; planning gains, knowledge-task losses.
+- Stengel-Eskin, Sander, Bonetti, Boguraev, Bowler, Sirin, Kirby (2026), *GLOSSOGEN: Emergent Language in Complex Multi-Agent LLM Interactions*, arXiv:2609.01491. Key finding: under time pressure with a postmortem deliberation stage, frontier models evolve inter-agent languages that drift to full human unintelligibility — even in fully cooperative scenarios with no adversarial intent. The platform's own methodology pairs every transcript with recorded environment variables, anchoring verification in the action record rather than the messages. Added 2026-09-22 (verified against the primary PDF, post-publication); original References verified 2026-09-17.
 
 ## AI Use Disclosure
 
