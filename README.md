@@ -49,6 +49,19 @@ Paste this to your agent (works with any agent that can read a URL or file):
 
 Use **Extended** for orchestrators and multi-agent systems, **Strict** for long-running agents with persistent state. One word does the work: *"read this"* gets you a summary of wOS; *"adopt this at Core conformance"* gets you conformance.
 
+## What's new in v0.8 (ratified 2026-09-02)
+
+**New directive — V7: Exact-read discipline for image inputs.**
+Every value an agent extracts from an image (chart, screenshot, scan, table rendered as pixels) must be transcribed verbatim into its working context before it is used in reasoning or output. An unreadable value is transcribed as `[unreadable]`. Substituting a plausible number is a fabrication and is now a spec violation.
+
+Why: a growing share of agent failures now happen at the vision boundary. An agent reads a chart, guesses "roughly 43%", and that guess becomes a confident, citable claim downstream. V7 closes the gap: shape observations ("the line descends") are observations, not data — quantitative claims require transcribed values, and if fidelity prevents transcription, the agent must state the gap instead of guessing.
+
+Also in v0.8:
+
+- §9 Governance ratified: authority chain (Principal / reviewer of record / plugin propagation), six-step amendment workflow, and version-gate rules. A single version counter now spans the public repo and all plugin deliveries.
+
+Full changelog: [SPECIFICATION.md](SPECIFICATION.md)
+
 ## Conformance levels
 
 | Level | Domains | Who should adopt |
