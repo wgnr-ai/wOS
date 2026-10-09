@@ -95,6 +95,18 @@ Substitute **Extended** for orchestrators and multi-agent systems, **Strict** fo
 
 ---
 
+## Repo content rules (agents and humans editing anything in this repository)
+
+These rules apply to **all** repo changes — README, issues, `docs/`, templates — not just the spec. Directive V3 applies to prose about the spec exactly as it applies to the spec.
+
+1. **Every §-anchor must resolve in the public `SPECIFICATION.md` on `main` before you push or post.** Grep the file, don't recall. Ground truth as of v0.8: §7 is **License**; conformance levels are **§4**; enforcement framework and code-level gates are **§5**; governance is **§9**. Container/promptinclude section numbers are delivery-internal and may not match the public spec — never cite them in public artifacts.
+2. **Ratification facts, version claims, and counts (directives, checks, levels) are citable values.** Each one needs a primary source: the changelog entry in SPECIFICATION.md, a counted heading grep, or the §4 table. No ship without the check.
+3. **Version bumps are not self-serve.** Directives, checks, and conformance definitions change only through the §9 amendment workflow, ending in a recorded review by the reviewer of record and Principal ratification. Anything else (docs, precedent notes, tooling) ships **unversioned**: no new version number, no edits to versioned archives, no injector version changes.
+4. **Fleet-internal implementations never count as adoption.** The v1.0 gate requires implementations *outside* wgnr.ai; an internal pilot is proof-of-use, not external adoption. Classify accurately before claiming traction publicly.
+5. **When in doubt about a spec-adjacent claim, route it through the reviewer of record before push.** A retroactive recorded review un-blocks urgency, but an uncorrected wrong claim in public is a defect no review timing can fix.
+
+---
+
 ## Machine-readable conformance
 
 Copy [`templates/wos-conformance.template.json`](templates/wos-conformance.template.json) to `wos-conformance.json` at your project root, set your level, and fill per-directive implementation modes. Schema and honesty rules: SPECIFICATION.md §5. Declared is not enforced; no evidence, no badge.
