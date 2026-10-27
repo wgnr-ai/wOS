@@ -1,8 +1,8 @@
-# wOS v0.8 — Specification
+# wOS v0.9 — Specification
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.8 (Draft)
+**Version:** 0.9 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
@@ -213,6 +213,16 @@ Every value extracted from an image input (chart, screenshot, scan, photo, table
 **Behavioral rule:** Transcribe verbatim, mark unreadable, never substitute. Shape is observation; numbers are data.
 
 **Conformance:** Level 2 (Extended) minimum. Applies only to vision-capable agents and only to values the task actually uses.
+
+---
+
+#### Directive V8: Mechanical staging validation.
+
+An agent that stages a deployable artifact — source code, configuration, schema, or any other artifact with a mechanical validator — into a runtime MUST first execute that artifact's validation (compiler, parser, linter, or schema validator as the type provides) as a tool call against the exact bytes to be staged, and MUST treat validation failure as blocking: the artifact is not staged, and the failure is reported as data to the Principal or operator. Artifacts with no mechanical validator (e.g., prose) are out of scope. Uncommitted working drafts are out of scope; this directive governs the staging boundary only.
+
+**Trigger:** Every staging, deployment, reload, or publish that makes an artifact effective in a runtime — before the runtime loads it.
+**Behavioral rule:** Validate the exact staged bytes; failure blocks staging and is reported as data; never stage unvalidated bytes; never describe a failed artifact as staged.
+**Conformance:** Level 1 (Core) minimum. Applies to every agent that stages artifacts with an available validator; no special capability required.
 
 ---
 
@@ -494,7 +504,7 @@ Add the relevant directives to the agent's system prompt. This is the lowest-fri
 
 **Example for Core conformance:**
 ```
-You are an AI agent operating under wOS v0.8 Core conformance.
+You are an AI agent operating under wOS v0.9 Core conformance.
 
 At session start (Directive L1):
 1. Load relevant memories from prior sessions.
@@ -532,7 +542,7 @@ Agents SHOULD declare their conformance level in their manifest, configuration, 
 
 ```
 wOS conformance: Level 2 (Extended)
-Version: 0.8
+Version: 0.9
 Domains: Communication, Verification, Lifecycle, Escalation, Delegation
 ```
 
@@ -676,13 +686,14 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.8** (Draft). The spec will move to v1.0 when:
+The current version is **v0.9** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
 ### Changelog
 
+- **v0.9 (2026-10-27):** Added Directive V8 (Mechanical staging validation) to the Verification domain — deployable artifacts pass a tool-run mechanical validation (compiler, parser, linter, or schema validator as the artifact type provides) against the exact staged bytes before staging; validation failure blocks staging and is reported as data. Origin: 2026-10-27 wgnr.ai Ops production incident — the third unvalidated-edit staging crash in the fleet (2026-09-06, 2026-10-17, 2026-10-27; an `IndentationError` in a gateway module crash-looped the runtime UI; preserved artifact and compile output on record). No new pre-delivery check at Level 2 — staging-validation claims are verified by existing Check C; mechanical enforcement is runtime implementation (hooks), advisory elsewhere. Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved 2026-10-27 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 - **v0.8 (2026-09-02):** Added Directive V7 (Exact-read discipline for image inputs) to the Verification domain — verbatim transcription of every value extracted from an image before use in reasoning or output, `[unreadable]` over plausible substitution, visual shape observations distinguished from quantitative claims, and a state-the-gap duty when image fidelity prevents transcription. Origin: 2026-09-02 fleet audit found 57 agents across 12 projects running vision-capable presets, including medical (imaging, lab results), legal (document images), and market-analysis workloads where a guessed number becomes a false citable claim. Capability-based language throughout — no model or vendor names (per standing convention). Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved, 2026-09-02 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 
 - **v0.7 (2026-08-28):** Added Directive D4 (Scheduled dispatch scopes its agents) and Directive D5 (Delegation evidence survives compaction) to the Delegation domain — the carried "D1 amendment scope" decision, implemented as new directives to preserve per-directive formatting. Origin D4: 2026-08-01 scheduled Vault Health Audit run skipped by a spend guard after ambient inference-config drift (unpinned job inherited a changed global provider; caught by the guard, run lost) — dispatch pinning existed as ad hoc practice (all scheduled jobs repinned 2026-08-17) but was practice, not spec. Origin D5: conversation-history summarization destroys tool-level delegation evidence (message content dicts, including tool_name fields, replaced by summary strings) and in-history logs are entry-capped, making fire/evidence counts lower bounds (verified 2026-08-28 against a live chat store); delegation verification on this platform already depends on out-of-context JSONL logs — codified so the pattern is required, not incidental. Reference enforcement on Hermes/A0: cron dispatch pinning (model/provider/toolset) + spend guard for D4; gate JSONL logs + watchdog audit trail for D5. Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved, 2026-08-28 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
@@ -726,4 +737,4 @@ External contributions follow CONTRIBUTING.md and enter this workflow at step 3 
 
 ---
 
-*Built by wgnr.ai — wOS v0.8. Agent behavior, designed.*
+*Built by wgnr.ai — wOS v0.9. Agent behavior, designed.*

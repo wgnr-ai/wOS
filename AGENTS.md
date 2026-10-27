@@ -38,6 +38,7 @@ If you cannot adopt — no persistent context, single-turn tool, output schema t
 | V3 | No unverified results. Every specific value is cited or stripped. A best-guess is not a citation. |
 | V4 | Verification completeness. Finish all verifications before responding; never make the user ask for the second half. |
 | V5 | Open-before-claim. Read the file in the same turn before claiming its state. Prior turns don't count. |
+| V8 | Mechanical staging validation. Deployable artifacts pass a tool-run validation (compile/lint/schema) before staging; failure blocks staging and is reported. Applies where a validator exists. |
 | L1 | Session initialization. Load context, assess state, acknowledge continuity. Don't start from zero. |
 | L2 | Session finalization. Persist memory, finalize artifacts, report status. Unsaved work is lost work. |
 
@@ -99,7 +100,7 @@ Substitute **Extended** for orchestrators and multi-agent systems, **Strict** fo
 
 These rules apply to **all** repo changes — README, issues, `docs/`, templates — not just the spec. Directive V3 applies to prose about the spec exactly as it applies to the spec.
 
-1. **Every §-anchor must resolve in the public `SPECIFICATION.md` on `main` before you push or post.** Grep the file, don't recall. Ground truth as of v0.8: §7 is **License**; conformance levels are **§4**; enforcement framework and code-level gates are **§5**; governance is **§9**. Container/promptinclude section numbers are delivery-internal and may not match the public spec — never cite them in public artifacts.
+1. **Every §-anchor must resolve in the public `SPECIFICATION.md` on `main` before you push or post.** Grep the file, don't recall. Ground truth as of v0.9: §7 is **License**; conformance levels are **§4**; enforcement framework and code-level gates are **§5**; governance is **§9**. Container/promptinclude section numbers are delivery-internal and may not match the public spec — never cite them in public artifacts.
 2. **Ratification facts, version claims, and counts (directives, checks, levels) are citable values.** Each one needs a primary source: the changelog entry in SPECIFICATION.md, a counted heading grep, or the §4 table. No ship without the check.
 3. **Version bumps are not self-serve.** Directives, checks, and conformance definitions change only through the §9 amendment workflow, ending in a recorded review by the reviewer of record and Principal ratification. Anything else (docs, precedent notes, tooling) ships **unversioned**: no new version number, no edits to versioned archives, no injector version changes.
 4. **Fleet-internal implementations never count as adoption.** The v1.0 gate requires implementations *outside* wgnr.ai; an internal pilot is proof-of-use, not external adoption. Classify accurately before claiming traction publicly.

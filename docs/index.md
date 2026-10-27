@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/wos-logo-light.png">
     <source media="(prefers-color-scheme: light)" srcset="assets/wos-logo-dark.png">
-    <img alt="wOS v0.8 — Agent behavior, designed." width="300">
+    <img alt="wOS v0.9 — Agent behavior, designed." width="300">
   </picture>
 </p>
 
@@ -14,7 +14,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License">
-  <img src="https://img.shields.io/badge/spec-v0.8-orange" alt="Spec Version">
+  <img src="https://img.shields.io/badge/spec-v0.9-orange" alt="Spec Version">
   <img src="https://img.shields.io/badge/status-Draft-yellow" alt="Status">
 </p>
 
@@ -71,4 +71,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-*Built by [wgnr.ai](https://wgnr.ai) — wOS v0.8. Human + AI, by design_*
+*Built by [wgnr.ai](https://wgnr.ai) — wOS v0.9. Human + AI, by design_*
