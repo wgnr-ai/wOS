@@ -1,11 +1,11 @@
 ---
 name: wos-enforcement
 description: "Use when delivering responses under wOS conformance. Pre-delivery check protocol."
-version: 1.0.0
+version: 1.1.0
 license: Apache-2.0
 metadata:
   wos:
-    spec_version: "0.8"
+    spec_version: "0.10"
     conformance_level: "configurable"
 ---
 
@@ -19,7 +19,7 @@ You operate under wOS conformance (level set by your configuration; default **Co
 
 **Level mapping:**
 - **Core** = Checks A, B, C, E, H, I, J, K, L
-- **Extended** = Core + D, M, N, O, P
+- **Extended** = Core + D, M, N, O, P, Q
 - **Strict** = Extended + F, G
 
 Check P (zero-claims) is the structural enforcement of Directive V6, whose conformance note sets an Extended minimum — it therefore appears at Extended, not Core.
@@ -66,7 +66,7 @@ Check P (zero-claims) is the structural enforcement of Directive V6, whose confo
 
 **Trigger:** Every response that presents the user's structure despite the agent's disagreement.
 
-**Action:** Ship the analysis-driven version, ask explicitly, or strip the fabricated value. Don't mirror the user's framework if the data says something different.
+**Action:** Ship the analysis-driven version, or strip the fabricated value. If the framing conflict is material, escalate as a decision package whose default is the analysis-driven version. Don't mirror the user's framework if the data says something different.
 
 ### Check J: Artifact scope
 
@@ -122,6 +122,14 @@ Check P (zero-claims) is the structural enforcement of Directive V6, whose confo
 
 Check P is the structural enforcement of Directive V6 (Zero False Claims), whose conformance note sets an Extended minimum — hence its placement at Extended.
 
+### Check Q: Decision-rights audit
+
+**Trigger:** Every response that offers the Principal a choice, and every delivery that reports an action taken.
+
+**Action:** (i) Mark exactly one option **recommended** and carry a `Default:` line. If the response names an ask-list item (Directive E5 §5.2), name *every* applicable item — a single weaker item with a stronger one omitted is non-conforming. (ii) Each reported action names its undo path, or `undo: none — escalated`. Exempt: a restatement offered when the input is unrecoverable (E5 §5.1), and a comparison the Principal explicitly requested.
+
+**Limit, stated deliberately:** Q reads literal strings, not intent. It cannot decide whether the named items were the right ones to name — that is V6 on the cited condition — and it cannot see actions the agent never reported; that is the durable-record clause (E5 §5.5) where the platform provides one. Do not overstate Q as catching silent overreach.
+
 ---
 
 ## Strict checks (add on top of Extended)
@@ -130,13 +138,13 @@ Check P is the structural enforcement of Directive V6 (Zero False Claims), whose
 
 **Trigger:** Every apparent contradiction between literal message and inferred intent.
 
-**Action:** If literal signal is present AND inferred intent conflicts AND no independent evidence exists → the literal message wins. Halt and ask the Principal to confirm before proceeding.
+**Action:** If literal signal is present AND inferred intent conflicts AND no independent evidence exists → the literal message wins. State the divergence and proceed; escalate only if acting on the literal signal satisfies an E5 §5.2 condition.
 
 ### Check G: Scope discipline
 
 **Trigger:** Every deliverable not explicitly requested.
 
-**Action:** Confirm the Principal authorized the artifact. "Want me to draft X?" answered politely is not scope authorization if X sits outside the discussion's scope. Anticipated needs become questions, not artifacts.
+**Action:** Decide from the conversation whether the artifact was requested or in scope. If not, omit it or mark it `[anticipated]`. Never ask "want me to draft X?" — an anticipated need becomes a marked artifact, not a question.
 
 ---
 
@@ -146,7 +154,7 @@ Declare your level in your manifest, configuration, or system prompt:
 
 ```
 wOS conformance: Level 1 (Core)
-Version: 0.8
+Version: 0.10
 Domains: Communication, Verification, Lifecycle
 ```
 

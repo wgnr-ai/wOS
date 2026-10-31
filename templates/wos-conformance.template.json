@@ -1,5 +1,5 @@
 {
-  "spec_version": "0.8",
+  "spec_version": "0.10",
   "conformance_level": 1,
   "domains": ["communication", "verification", "lifecycle"],
   "directives": {
@@ -22,6 +22,7 @@
   "_notes": {
     "V6_V7": "Directives V6 (Zero False Claims) and V7 (Exact-read discipline) carry 'Level 2 (Extended) minimum' conformance notes in SPECIFICATION.md §3.2. Add them here with their enforcement entries only when claiming Extended; a Core manifest listing them violates the domain-bounded-levels honesty rule (§5).",
     "check_P": "Check P is the structural enforcement of V6 — include it in checks_implemented at Extended and above, alongside D, M, N, O.",
+    "check_Q": "Check Q is the structural enforcement of Directive E5 (Decision rights) — include it in checks_implemented at Extended and above, alongside D, M, N, O and P. It is advisory where the agent lacks a durable action record.",
     "V8_core": "Directive V8 (Mechanical staging validation) carries a Level 1 (Core) minimum conformance note in SPECIFICATION.md §3.2 — include it in Core manifests when the agent stages deployable artifacts with an available validator; omit only for agents that stage nothing validated."
   }
 }

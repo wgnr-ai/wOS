@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/wos-logo-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="assets/wos-logo-light.png">
-    <img alt="wOS v0.9 — Agent behavior, designed." width="300">
+    <img alt="wOS v0.10 — Agent behavior, designed." width="300">
   </picture>
 </p>
 
@@ -14,7 +14,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License">
-  <img src="https://img.shields.io/badge/spec-v0.9-orange" alt="Spec Version">
+  <img src="https://img.shields.io/badge/spec-v0.10-orange" alt="Spec Version">
   <img src="https://img.shields.io/badge/status-Draft-yellow" alt="Status">
 </p>
 
@@ -49,14 +49,14 @@ Paste this to your agent (works with any agent that can read a URL or file):
 
 Use **Extended** for orchestrators and multi-agent systems, **Strict** for long-running agents with persistent state. One word does the work: *"read this"* gets you a summary of wOS; *"adopt this at Core conformance"* gets you conformance.
 
-## What's new in v0.9 (ratified 2026-10-27)
+## What's new in v0.10 (ratified 2026-10-27)
 
 **New directive — V8: Mechanical staging validation.**
 An agent that stages a deployable artifact into a runtime must first run that artifact's mechanical validation (compiler, parser, linter, schema validator) against the exact bytes to be staged. Validation failure blocks staging and is reported as data. Unvalidated bytes are never staged, and a failed artifact is never described as staged.
 
 Why: three production incidents in one fleet (2026-09-06, 2026-10-17, 2026-10-27) shared one root cause — an unvalidated edit reached a live runtime. In the third, a single `IndentationError` in a gateway module crash-looped the UI service until an out-of-band restore. V8 closes the gap: validation is a tool-run against the exact staged bytes at the staging boundary; working drafts and validator-less artifact types are out of scope.
 
-Also in v0.9:
+Also in v0.10:
 
 - Conformance: V8 carries **Level 1 (Core) minimum** — universal, mechanical, zero-cost. No new pre-delivery check at Level 2; staging-validation claims verify under existing Check C. Mechanical enforcement is runtime implementation (hooks), advisory elsewhere.
 
@@ -94,4 +94,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-*Built by [wgnr.ai](https://wgnr.ai) — wOS v0.9. Agent behavior, designed.*
+*Built by [wgnr.ai](https://wgnr.ai) — wOS v0.10. Agent behavior, designed.*

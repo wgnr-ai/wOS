@@ -4,10 +4,10 @@ Ready-made artifacts for adopting wOS without transcribing the spec by hand.
 
 ## `wos-enforcement.SKILL.md`
 
-The pre-delivery check protocol (Checks A–P) as an installable skill. Drop it into any agent runtime that supports skills or auto-loaded instruction files; it runs the gating checks before every response.
+The pre-delivery check protocol (Checks A–Q) as an installable skill. Drop it into any agent runtime that supports skills or auto-loaded instruction files; it runs the gating checks before every response.
 
 - **Core conformance** → Checks A, B, C, E, H, I, J, K, L
-- **Extended** → Core + D, M, N, O, P
+- **Extended** → Core + D, M, N, O, P, Q
 - **Strict** → Extended + F, G
 
 Check P (zero-claims) sits at Extended: it is the structural enforcement of Directive V6, whose conformance note sets an Extended minimum. Install the skill **together with** the [`AGENTS.md`](../AGENTS.md) directive digest (or the spec's §5 system-prompt block) — the checks enforce the directives; they are not a substitute for loading them.

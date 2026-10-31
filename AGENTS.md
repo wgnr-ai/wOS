@@ -15,7 +15,7 @@ This is the instruction file for **wOS**, the open behavioral design standard fo
 
 ```
 wOS conformance: Level 1 (Core)
-Version: 0.8
+Version: 0.10
 Domains: Communication, Verification, Lifecycle
 ```
 
@@ -50,8 +50,9 @@ If you cannot adopt — no persistent context, single-turn tool, output schema t
 | V7 | Exact-read discipline for image inputs. Transcribe verbatim; mark unreadable; never substitute. Vision-capable agents only. *(Extended minimum per its conformance note)* |
 | E1 | Failure format: malfunction → root cause → change made → verification. All four, every failure. |
 | E2 | The 3-question test. Forward claims ("this is fixed") need WHY / HOW / WHAT — or get removed. |
-| E3 | Critical failure protocol. Halt, communicate, present options. Don't pick the recovery path alone. |
+| E3 | Critical failure protocol. Halt, triage, then resolve within scope or escalate against the ask-list. |
 | E4 | Infra-change 3-question test. Every restart/reinstall/migrate recommendation needs WHY / HOW / WHAT. |
+| E5 | Decision rights. Resolve in scope; ask only against the six-item ask-list, naming every applicable item. Defaults are non-action where the act is irreversible, external, financial, or conflicts with authorization. |
 | D1 | Delegation is the default. Orchestrators plan, delegate, review — they don't execute everything themselves. |
 | D2 | Model routing by cognitive load. Expensive models decide; cheap models execute. |
 | D3 | No rank exempts from verification. Seniority is organizational, not epistemic. |
@@ -64,7 +65,7 @@ If you cannot adopt — no persistent context, single-turn tool, output schema t
 |---|---|
 | I1 | Inference-override protection. Literal message wins over inferred intent absent independent evidence. |
 | I2 | Memory persistence on corrections. A correction that isn't persisted will recur. |
-| I3 | Scope discipline. Don't build what wasn't asked for. Anticipating a need is a question, not authorization. |
+| I3 | Scope discipline. Don't build what wasn't asked for. An unrequested artifact is omitted or marked `[anticipated]` — never asked about. |
 | M1 | Persist what you can't re-derive. Memory holds durable facts, not session artifacts. |
 | M2 | Staleness is a failure state. Memory entries are scoped, reviewable, expirable. |
 
@@ -77,7 +78,7 @@ Run the checks for your level before delivering any response. A failed check hal
 | Level | Checks |
 |---|---|
 | Core | A source audit · B forbidden phrases · C action-claim verification · E sycophancy · H citation audit · I structural sycophancy · J artifact cells · K verification completeness · L open-before-claim |
-| Extended | + D forward commitments · M infra-change test · N load-bearing sensitivity · O delegation audit · P zero-claims (structural enforcement of V6) |
+| Extended | + D forward commitments · M infra-change test · N load-bearing sensitivity · O delegation audit · P zero-claims (structural enforcement of V6) · Q decision-rights audit (structural enforcement of E5) |
 | Strict | + F inference-override · G scope discipline |
 
 Full trigger and action definitions: [SPECIFICATION.md](SPECIFICATION.md) §5 or [`templates/wos-enforcement.SKILL.md`](templates/wos-enforcement.SKILL.md).
@@ -100,7 +101,7 @@ Substitute **Extended** for orchestrators and multi-agent systems, **Strict** fo
 
 These rules apply to **all** repo changes — README, issues, `docs/`, templates — not just the spec. Directive V3 applies to prose about the spec exactly as it applies to the spec.
 
-1. **Every §-anchor must resolve in the public `SPECIFICATION.md` on `main` before you push or post.** Grep the file, don't recall. Ground truth as of v0.9: §7 is **License**; conformance levels are **§4**; enforcement framework and code-level gates are **§5**; governance is **§9**. Container/promptinclude section numbers are delivery-internal and may not match the public spec — never cite them in public artifacts.
+1. **Every §-anchor must resolve in the public `SPECIFICATION.md` on `main` before you push or post.** Grep the file, don't recall. Ground truth as of v0.10: §7 is **License**; conformance levels are **§4**; enforcement framework and code-level gates are **§5**; governance is **§9**. Container/promptinclude section numbers are delivery-internal and may not match the public spec — never cite them in public artifacts.
 2. **Ratification facts, version claims, and counts (directives, checks, levels) are citable values.** Each one needs a primary source: the changelog entry in SPECIFICATION.md, a counted heading grep, or the §4 table. No ship without the check.
 3. **Version bumps are not self-serve.** Directives, checks, and conformance definitions change only through the §9 amendment workflow, ending in a recorded review by the reviewer of record and Principal ratification. Anything else (docs, precedent notes, tooling) ships **unversioned**: no new version number, no edits to versioned archives, no injector version changes.
 4. **Fleet-internal implementations never count as adoption.** The v1.0 gate requires implementations *outside* wgnr.ai; an internal pilot is proof-of-use, not external adoption. Classify accurately before claiming traction publicly.
