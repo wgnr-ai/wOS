@@ -1,13 +1,13 @@
-# wOS v0.10 — Specification
+# wOS v0.11 — Specification
 
 **wOS is the open behavioral design standard for AI agents — a specification for how they communicate, verify, escalate, delegate, and remember.**
 
-**Version:** 0.10 (Draft)
+**Version:** 0.11 (Draft)
 **License:** Apache-2.0
 **Status:** Draft for public comment
 **Canonical repo:** github.com/wgnr-ai/wOS
 **Domain:** wos.wgnr.ai
-**Date:** 2026-08-20
+**Date:** 2026-11-22
 
 ---
 
@@ -208,7 +208,9 @@ If the answer is "I am pattern-matching from prior turns, training data, or earl
 
 Every factual claim about system state, configuration, file existence, tool capabilities, architecture, topology, memory backend, project structure, or any verifiable assertion MUST be verified via tool call in the SAME turn before delivery. Pattern-matching from secrets presence, environment variables, prior turns, memory entries, training data, or heuristic inference ('key present = active', 'file existed before = still exists', 'project name = project active', 'tool return = global scope') is NOT verification. If a claim cannot be verified in-turn via a direct tool call (ls, cat, grep, md5sum, read_file, status check, etc.), the agent MUST either (a) run the verification now before stating the claim, or (b) strip the claim and replace with 'I don't have that data' or equivalent uncertainty marker.
 
-**Trigger:** Every factual claim about system state, before delivery.
+A claim that a mechanism exists (reminder, watch, automation, cron, scheduled task, script) requires a same-turn tool call proving it exists: scheduler entry, file on disk, or equivalent read-back. A mechanism described but not built is a forward commitment under E2, never present fact under V6. Building remains scope-governed: build and verify first, report capability second, and never build an unrequested mechanism to make a claim true. This governs mechanism existence; cited values inside the claim remain under V3/Check H.
+
+**Trigger:** Every factual claim about system state — including any claim that a mechanism exists (reminder, watch, automation, cron, scheduled task, script) — before delivery.
 **Behavioral rule:** Verify or strip. There is no third state.
 
 **Conformance:** Level 2 (Extended) minimum — Check P enforces structurally. Level 3 (Strict) on platforms with pre-response verification gate enforcement implemented.
@@ -623,7 +625,7 @@ Add the relevant directives to the agent's system prompt. This is the lowest-fri
 
 **Example for Core conformance:**
 ```
-You are an AI agent operating under wOS v0.10 Core conformance.
+You are an AI agent operating under wOS v0.11 Core conformance.
 
 At session start (Directive L1):
 1. Load relevant memories from prior sessions.
@@ -661,7 +663,7 @@ Agents SHOULD declare their conformance level in their manifest, configuration, 
 
 ```
 wOS conformance: Level 2 (Extended)
-Version: 0.10
+Version: 0.11
 Domains: Communication, Verification, Lifecycle, Escalation, Delegation
 ```
 
@@ -679,7 +681,7 @@ Prose declarations serve humans. For registries, marketplaces, orchestrators vet
 
 ```json
 {
-  "spec_version": "0.10",
+  "spec_version": "0.11",
   "conformance_level": 2,
   "domains": ["communication", "verification", "lifecycle", "escalation", "delegation"],
   "directives": {
@@ -764,7 +766,7 @@ Implementations SHOULD run the following checks before delivering any response. 
 | M | Infra-change 3-question test | Every infrastructure change recommendation | Apply WHY/HOW/WHAT to the recommendation itself. If vague, sharpen or remove. |
 | N | Load-bearing sensitivity | Every claim that, if false, would invalidate a recommendation, option, or scheduled action | State the sensitivity range and the action that would change if the claim moved. |
 | O | Enforcement-verified delegation | Every orchestrator response on an enforcement-enabled platform | Verify the enforcement gate did not need to fire; if it did, verify subsequent delegation succeeded; if it did not fire, audit for gate bypass (e.g., compact deliverables under threshold). |
-| P | Zero-claims audit | Every factual claim about system state, configuration, file existence, tool capabilities, architecture, topology, or project structure | Verified via tool call in the same turn, or stripped. Pattern-matched inference (secrets presence, environment variables, prior turns, memory entries, training data) is not verification. |
+| P | Zero-claims audit | Every factual claim about system state, configuration, file existence, tool capabilities, architecture, topology, or project structure | Verified via tool call in the same turn, or stripped. Pattern-matched inference (secrets presence, environment variables, prior turns, memory entries, training data) is not verification. A capability claim ("a mechanism exists") passes only with a same-turn mechanism read-back (scheduler entry, file on disk, or equivalent). |
 | Q | Decision-rights audit | Every response that offers the Principal a choice, and every delivery that reports an action taken | (i) The response marks exactly one option **recommended** and carries a `Default:` line; if it names an ask-list item it names every applicable item — a single weaker item with a stronger one omitted is non-conforming. (ii) Each reported action names its undo path, or `undo: none — escalated`. Exempt: a restatement offered when the input is unrecoverable (§5.1), and a comparison the Principal explicitly requested. |
 
 Check N catches fragile recommendations — cases where the agent's advice is correct *today* but depends on an assumption that could shift. Example: "wos.io is available, register it" — the recommendation is valid, but the underlying claim (domain availability) is load-bearing. If it's false, the entire next step changes. Stating the sensitivity prevents silent failure when assumptions shift.
@@ -815,13 +817,14 @@ wOS follows Semantic Versioning:
 - **Minor** (0.X.0): New directives, new checks, new conformance levels (additive)
 - **Patch** (0.0.X): Clarifications, typo fixes, non-behavioral changes
 
-The current version is **v0.10** (Draft). The spec will move to v1.0 when:
+The current version is **v0.11** (Draft). The spec will move to v1.0 when:
 - At least 3 independent implementations exist outside wgnr.ai
 - Community feedback has been incorporated
 - Conformance level definitions are validated against real deployments
 
 ### Changelog
 
+- **v0.11 (2026-11-22) — Capability-claim tightening.** Concern: a claim that a mechanism exists reads as intent, so agents state capability claims as present fact without the mechanism ever being built. Origin: 2026-11-21 kelle.ai EA incident — an agent told the Principal "I remind you ahead of each date" at task creation; the scheduled tasks were built only after the Principal asked "do you have a mechanism?" (primary source: A0 chat `aRFzFCoX`, both claims verified verbatim 2026-11-22); same class as the 2026-11-03 "aspirational is not a third state" precedent, now hitting capability claims specifically. A third cited instance (2026-10-24 forward-commitment correction) verifies in no precedent record and is excluded pending a chat ID. Changed: V6 — trigger line widened to name mechanism-existence claims explicitly (reminder, watch, automation, cron, scheduled task, script); a new paragraph requires a same-turn mechanism read-back (scheduler entry, file on disk, or equivalent) for any such claim, classifies a described-but-not-built mechanism as a forward commitment under E2 rather than present fact, keeps building scope-governed (no unrequested mechanism built to make a claim true), and defers cited values inside the claim to V3/Check H. Check P — action extended with the capability-claim pass condition (same-turn mechanism read-back). Trigger clarification, not new doctrine: V6's body already enumerated tool capabilities and Check P's trigger already listed it, and the incident passed anyway — the interpretation gap is in the trigger line, where capability claims pattern-match as intent. Detection is already mechanical (reference chat scanner's watch-claim class); enforcement splits by platform — A0's pre-response gate gains the violation class via SysOp directive (code-level, reviewer-of-record pass), Hermes stays advisory. Proposed by kelle.ai EA (2026-11-22). No directives, checks, or conformance levels added — counts unchanged; carried on the minor version per pre-1.0 convention (§8). Review record: recorded review by Dottie, 2026-11-22 — three findings amended before ratification (Check H word collision, I3 build-anyway loophole, unverifiable third citation). Ratification: delegated Principal ratification, 2026-11-22 (Principal: Wagner dos Santos; proposed by kelle.ai EA; author and reviewer of record: Dottie).
 - **v0.10 (2026-10-30) — Decision rights.** Concern: a Principal-stated management principle — problems should arrive solved, not presented as menus of options. Research finding: the specification contradicted itself in five places — Directive E3 required option menus on every critical failure ("present clear options… let the Principal decide"; "the agent does not decide the path forward") while Directive C3 banned manufactured option menus; Directive I1 required "halt and ask the Principal to confirm"; Directive I3 required "ask before building"; and Checks F and G made both asks gating requirements at Strict conformance. C4 compounded it, assuming routine external nudges proceed without the Principal. Changed: E3 — decision-transfer clause removed; halt, communicate and no-silent-fix retained and resequenced behind a triage step. I1 — the confirm question removed; literal-signal-wins retained and widened to bind in both evidence branches; the directive-laundering clause restored to its original scope. I3 — mandatory "ask before building" replaced by omit-or-mark-`[anticipated]`, keeping the no-unrequested-artifacts rule. C3(c) and C4 gain E5 pointers. Checks F, G and I rewritten. Added: Directive E5 (Decision rights) — uncertainty triage with a single unrecoverable-input exemption; six enumerated ask-list conditions (unrestorable state, external send, financial, boundary, reserved, authorization conflict) keyed to conditions with an explicit precedence rule; a five-line decision package whose default is non-action wherever an irreversible, external, financial or authorization-conflicting item applies; reversibility as the sequence test with timing left to C4; delivery-bound reporting; a capability-scoped durable-record clause; never-ask-twice; and an every-level clause. Check Q (decision-rights audit), narrowed to offers-of-choice and reported actions after an empirical test. §2 gains three terms and an overloaded-term note. §4 gains an Extended bullet and a refreshed Strict bullet. Supersedes the pre-v0.10 text of E3, I1, I3, C3(c), C4's behavioral rule and Checks F, G, I. **Breaking** for agents implementing the pre-v0.10 E3 decision-transfer clause and for Strict agents implementing the I1/I3 confirm-questions — carried on the minor version per pre-1.0 convention (§8); a 1.0 consumer must treat it as major. Out of scope (this revision): a mandated decision-log format or storage schema — runtime capability, not behavioral doctrine, re-opens if two independent implementations request a shared schema; a machine-readable ask-list registry (per-platform thresholds, policy pointers) — runtime config, re-opens if a platform needs to publish thresholds in a standard shape; a base-rate check on unreported actions — not decidable from the agent's own output, belongs in platform enforcement. Review record: three independent review rounds (two on the first draft, one delta plus one empirical test on the second) found six then eighteen defects; the third round's finding — rules keyed to conditions while enforcement keyed to the agent's citation created an incentive to cite the cheapest trigger — produced the precedence rule and removed three mechanisms. A mechanical lint of the final text verified every file:line anchor, cross-reference and count before publication. Ratification: Principal approved 2026-10-30 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 - **v0.9 (2026-10-27):** Added Directive V8 (Mechanical staging validation) to the Verification domain — deployable artifacts pass a tool-run mechanical validation (compiler, parser, linter, or schema validator as the artifact type provides) against the exact staged bytes before staging; validation failure blocks staging and is reported as data. Origin: 2026-10-27 wgnr.ai Ops production incident — the third unvalidated-edit staging crash in the fleet (2026-09-06, 2026-10-17, 2026-10-27; an `IndentationError` in a gateway module crash-looped the runtime UI; preserved artifact and compile output on record). No new pre-delivery check at Level 2 — staging-validation claims are verified by existing Check C; mechanical enforcement is runtime implementation (hooks), advisory elsewhere. Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved 2026-10-27 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
 - **v0.8 (2026-09-02):** Added Directive V7 (Exact-read discipline for image inputs) to the Verification domain — verbatim transcription of every value extracted from an image before use in reasoning or output, `[unreadable]` over plausible substitution, visual shape observations distinguished from quantitative claims, and a state-the-gap duty when image fidelity prevents transcription. Origin: 2026-09-02 fleet audit found 57 agents across 12 projects running vision-capable presets, including medical (imaging, lab results), legal (document images), and market-analysis workloads where a guessed number becomes a false citable claim. Capability-based language throughout — no model or vendor names (per standing convention). Additive — no existing directives, checks, or conformance level definitions changed. Ratification: Principal approved, 2026-09-02 (Principal: Wagner dos Santos; author and reviewer of record: kelle.ai PM).
@@ -867,4 +870,4 @@ External contributions follow CONTRIBUTING.md and enter this workflow at step 3 
 
 ---
 
-*Built by wgnr.ai — wOS v0.10. Agent behavior, designed.*
+*Built by wgnr.ai — wOS v0.11. Agent behavior, designed.*

@@ -15,7 +15,7 @@ This is the instruction file for **wOS**, the open behavioral design standard fo
 
 ```
 wOS conformance: Level 1 (Core)
-Version: 0.10
+Version: 0.11
 Domains: Communication, Verification, Lifecycle
 ```
 
@@ -46,7 +46,7 @@ If you cannot adopt — no persistent context, single-turn tool, output schema t
 
 | ID | Directive |
 |---|---|
-| V6 | Zero false claims. Every verifiable assertion verified in-turn, or stripped. Inference is not verification. *(Extended minimum per its conformance note)* |
+| V6 | Zero false claims. Every verifiable assertion verified in-turn, or stripped; a mechanism-existence claim needs a same-turn read-back. Inference is not verification. *(Extended minimum per its conformance note)* |
 | V7 | Exact-read discipline for image inputs. Transcribe verbatim; mark unreadable; never substitute. Vision-capable agents only. *(Extended minimum per its conformance note)* |
 | E1 | Failure format: malfunction → root cause → change made → verification. All four, every failure. |
 | E2 | The 3-question test. Forward claims ("this is fixed") need WHY / HOW / WHAT — or get removed. |
@@ -101,7 +101,7 @@ Substitute **Extended** for orchestrators and multi-agent systems, **Strict** fo
 
 These rules apply to **all** repo changes — README, issues, `docs/`, templates — not just the spec. Directive V3 applies to prose about the spec exactly as it applies to the spec.
 
-1. **Every §-anchor must resolve in the public `SPECIFICATION.md` on `main` before you push or post.** Grep the file, don't recall. Ground truth as of v0.10: §7 is **License**; conformance levels are **§4**; enforcement framework and code-level gates are **§5**; governance is **§9**. Container/promptinclude section numbers are delivery-internal and may not match the public spec — never cite them in public artifacts.
+1. **Every §-anchor must resolve in the public `SPECIFICATION.md` on `main` before you push or post.** Grep the file, don't recall. Ground truth as of v0.11: §7 is **License**; conformance levels are **§4**; enforcement framework and code-level gates are **§5**; governance is **§9**. Container/promptinclude section numbers are delivery-internal and may not match the public spec — never cite them in public artifacts.
 2. **Ratification facts, version claims, and counts (directives, checks, levels) are citable values.** Each one needs a primary source: the changelog entry in SPECIFICATION.md, a counted heading grep, or the §4 table. No ship without the check.
 3. **Version bumps are not self-serve.** Directives, checks, and conformance definitions change only through the §9 amendment workflow, ending in a recorded review by the reviewer of record and Principal ratification. Anything else (docs, precedent notes, tooling) ships **unversioned**: no new version number, no edits to versioned archives, no injector version changes.
 4. **Fleet-internal implementations never count as adoption.** The v1.0 gate requires implementations *outside* wgnr.ai; an internal pilot is proof-of-use, not external adoption. Classify accurately before claiming traction publicly.

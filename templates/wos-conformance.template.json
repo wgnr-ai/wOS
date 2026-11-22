@@ -1,5 +1,5 @@
 {
-  "spec_version": "0.10",
+  "spec_version": "0.11",
   "conformance_level": 1,
   "domains": ["communication", "verification", "lifecycle"],
   "directives": {

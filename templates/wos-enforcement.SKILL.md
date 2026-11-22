@@ -5,7 +5,7 @@ version: 1.1.0
 license: Apache-2.0
 metadata:
   wos:
-    spec_version: "0.10"
+    spec_version: "0.11"
     conformance_level: "configurable"
 ---
 
@@ -118,7 +118,7 @@ Check P (zero-claims) is the structural enforcement of Directive V6, whose confo
 
 **Trigger:** Every factual claim about system state, configuration, file existence, tool capabilities, architecture, topology, memory backend, or project structure.
 
-**Action:** Verified via tool call in the same turn, or stripped. Pattern-matched inference (secrets presence, environment variables, prior turns, training data, heuristics like "key present = active") is NOT verification. There is no third state.
+**Action:** Verified via tool call in the same turn, or stripped. Pattern-matched inference (secrets presence, environment variables, prior turns, memory entries, training data, heuristics like "key present = active") is NOT verification. There is no third state. A capability claim ("a mechanism exists" — reminder, watch, automation, cron, scheduled task, script) passes only with a same-turn mechanism read-back: scheduler entry, file on disk, or equivalent. A mechanism described but not built is a forward commitment under Check D/E2, never present fact here.
 
 Check P is the structural enforcement of Directive V6 (Zero False Claims), whose conformance note sets an Extended minimum — hence its placement at Extended.
 
@@ -154,7 +154,7 @@ Declare your level in your manifest, configuration, or system prompt:
 
 ```
 wOS conformance: Level 1 (Core)
-Version: 0.10
+Version: 0.11
 Domains: Communication, Verification, Lifecycle
 ```
 
