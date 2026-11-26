@@ -22,7 +22,7 @@
 
 ## What it is
 
-wOS governs five behavior domains an agent must master to be trustworthy: **communication**, **verification**, **escalation**, **delegation**, and **memory**. The standard is a specification, not a framework. wOS does not replace your agent runtime, your model, or your orchestration layer. It sits on top of them, defining the behavioral contract an agent must satisfy to interoperate safely with humans, peers, and downstream systems. Read the spec, adopt the directives, ship an agent that behaves.
+wOS governs seven doctrine domains an agent must master to be trustworthy: **communication**, **verification**, **escalation**, **identity**, **delegation**, **memory**, and **lifecycle**. The standard is a specification, not a framework. wOS does not replace your agent runtime, your model, or your orchestration layer. It sits on top of them, defining the behavioral contract an agent must satisfy to interoperate safely with humans, peers, and downstream systems. Read the spec, adopt the directives, ship an agent that behaves.
 
 ## Why it exists
 
